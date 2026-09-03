@@ -101,5 +101,19 @@ python -m pytest tests/test_api.py -v
 
 ---
 
+## ⚡ AntiGravity™ Advanced Intelligence Engine
+
+The platform integrates the specialized **AntiGravity™ Engine** for algorithmic heuristics and forensic intelligence:
+- **Predictive Routing**: Bayesian Dirichlet-Multinomial transition matrix forecasting next-hop VASP deposits and bridge vectors.
+- **Peel Chain Collapsing**: Shannon-entropy discriminator separating malicious laundering peels from exchange hot sweeps ($65\%+$ visual reduction).
+- **Legal NLP Generation**: Courtroom-ready Section 65B IEA / Section 63 BSA certificates and Section 91/102 CrPC notices.
+- **Mule Feeder Clustering**: 24-hour sliding window anomaly detection for structured smurfing rings.
+- **ZK Evidence Notarization**: SHA-256 Merkle root commitment to Polygon POS for digital tamper-proofing.
+- **Threat Intel Federation**: Instant screening against OFAC SDN, Chainabuse, and darknet indexers.
+- **Fiat Off-Ramp Correlation**: Probability matrix correlating VASP operating hours and banking clearing windows (IMPS/UPI, AED, SEPA, Fedwire).
+- **Master 150+ Feature Expansion Backlog**: Full categorized specifications across 6 investigation domains in [`docs/ANTIGRAVITY_ENGINE_SPEC.md`](docs/ANTIGRAVITY_ENGINE_SPEC.md).
+
+---
+
 ## ⚖️ Legal & Ethical Compliance
 BLUCE LOCK is an investigative decision-support prototype. Attribution findings are probabilistic and require statutory verification by authorized law enforcement officers through appropriate legal notices under Section 91 & Section 102 of the Code of Criminal Procedure, 1973 / Bharatiya Nagarik Suraksha Sanhita (BNSS).

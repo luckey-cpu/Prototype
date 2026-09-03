@@ -8,6 +8,7 @@ from app.api.alerts import router as alerts_router
 from app.api.reports import router as reports_router
 from app.api.ai import router as ai_router
 from app.api.system import router as system_router
+from app.api.antigravity import router as antigravity_router
 
 app = FastAPI(
     title="BLUCE LOCK — Real-Time Crypto Fraud Attribution & VASP Intelligence Platform",
@@ -31,6 +32,7 @@ app.include_router(alerts_router)
 app.include_router(reports_router)
 app.include_router(ai_router)
 app.include_router(system_router)
+app.include_router(antigravity_router)
 
 @app.get("/")
 def root():
