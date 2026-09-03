@@ -1,0 +1,58 @@
+[
+  {
+    "id": "ALT-2026-9041",
+    "priority": "CRITICAL",
+    "title": "Potential exchange deposit detected",
+    "case_id": "NCRP-2026-00182",
+    "wallet_address": "0x7A2F8C91F0328b9c24090954e3d389a91f",
+    "funds_inr": 842500.0,
+    "likely_vasp": "BINANCE",
+    "confidence_pct": 91.0,
+    "timestamp": "3 minutes ago",
+    "recommended_action": "Review VASP-associated deposit activity and preserve relevant evidence according to applicable legal procedures (CrPC 91 / Section 102).",
+    "status": "UNREAD",
+    "blockchain": "Polygon"
+  },
+  {
+    "id": "ALT-2026-9039",
+    "priority": "HIGH",
+    "title": "Cross-Chain Bridge Transit Confirmed",
+    "case_id": "NCRP-2026-00182",
+    "wallet_address": "0x8B3E901F410Ac9D86e6Ce3F6B3475142106eDb79",
+    "funds_inr": 3720000.0,
+    "likely_vasp": "STARGATE_RELAYER",
+    "confidence_pct": 98.0,
+    "timestamp": "25 minutes ago",
+    "recommended_action": "Preserve Stargate relayer transaction logs and monitor Polygon destination address for immediate cash-out.",
+    "status": "ACKNOWLEDGED",
+    "blockchain": "Ethereum"
+  },
+  {
+    "id": "ALT-2026-9022",
+    "priority": "HIGH",
+    "title": "Rapid Fund Forwarding Spike (< 180s)",
+    "case_id": "NCRP-2026-00177",
+    "wallet_address": "0x8B3E901F410Ac9D86e6Ce3F6B3475142106eDb79",
+    "funds_inr": 2080000.0,
+    "likely_vasp": "PENDING_CLUSTER",
+    "confidence_pct": 74.0,
+    "timestamp": "1 hour ago",
+    "recommended_action": "Correlate IP address with upstream victim session timestamps to identify mule controller origin.",
+    "status": "INVESTIGATING",
+    "blockchain": "Ethereum"
+  },
+  {
+    "id": "ALT-2026-8991",
+    "priority": "MEDIUM",
+    "title": "DEX Liquidity Pool Swap Obfuscation",
+    "case_id": "NCRP-2026-00151",
+    "wallet_address": "0x9C4F1A28Ea657c918F3Bce921b72e9D906351F02",
+    "funds_inr": 315000.0,
+    "likely_vasp": "UNISWAP_V3",
+    "confidence_pct": 99.0,
+    "timestamp": "18 hours ago",
+    "recommended_action": "Track swapped token address path and isolate destination liquidity receiver wallet.",
+    "status": "RESOLVED",
+    "blockchain": "Ethereum"
+  }
+]

@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* SIH PS 26183 Exact Color Palette */
+    --bg-main: #0A0E1A;          /* Deep Slate Navy */
+    --bg-surface: #121829;       /* Dark Steel Blue */
+    --bg-card: rgba(18, 24, 41, 0.85);
+    --border-cyber: rgba(0, 240, 255, 0.16);
+    --accent-cyan: #00F0FF;      /* Neon Cyan */
+    --accent-crimson: #FF3366;   /* Crimson Red for critical/high-risk alerts */
+    --accent-emerald: #00E676;   /* Emerald Green for verified VASP hits */
+    --accent-purple: #9D4EDD;    /* Purple for Cross-Chain Bridges */
+    --accent-amber: #FFB703;     /* Amber for High Risk */
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-main);
+    color: #F1F5F9;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar for dark forensic cyber theme */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A0E1A;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 240, 255, 0.25);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 240, 255, 0.55);
+  }
+}
+
+/* Glassmorphism & Cyber Command Center Utility Classes */
+.forensic-surface {
+  background: #121829;
+  border: 1px solid rgba(0, 240, 255, 0.14);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+}
+
+.forensic-surface-glow {
+  background: rgba(18, 24, 41, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.15);
+}
+
+.forensic-surface-vasp {
+  background: rgba(18, 30, 25, 0.9);
+  border: 1px solid rgba(0, 230, 118, 0.35);
+  box-shadow: 0 0 25px -5px rgba(0, 230, 118, 0.18);
+}
+
+.forensic-surface-crimson {
+  background: rgba(35, 14, 22, 0.85);
+  border: 1px solid rgba(255, 51, 102, 0.35);
+  box-shadow: 0 0 25px -5px rgba(255, 51, 102, 0.18);
+}
+
+.glass-panel {
+  background: #121829;
+  border: 1px solid rgba(0, 240, 255, 0.14);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel-glow {
+  background: rgba(18, 24, 41, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  box-shadow: 0 0 25px -5px rgba(0, 240, 255, 0.15);
+}
+
+.cyber-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Pulse radar animations */
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-radar {
+  animation: radar-sweep 4s linear infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 4px #00F0FF); }
+  50% { opacity: 1; filter: drop-shadow(0 0 12px #00F0FF); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+/* React Flow Cyberpunk Grid and Nodes */
+.react-flow__renderer {
+  background-color: #0A0E1A !important;
+}
+
+.react-flow__edge-path {
+  stroke-linecap: round;
+}
+
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00F0FF;
+  border: 1.5px solid #0A0E1A;
+}
+
+/* Micro-interaction node expand transition */
+.node-expand-transition {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Print stylesheet for official Police Investigation Reports */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print, nav, aside, button, .modal-backdrop {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .forensic-surface, .glass-panel {
+    background: #ffffff !important;
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+  }
+}

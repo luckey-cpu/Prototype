@@ -1,0 +1,94 @@
+[
+  {
+    "cluster_id": "VASP_BINANCE_HOT14",
+    "vasp_name": "BINANCE",
+    "chain": "Polygon",
+    "confidence_pct": 91.0,
+    "is_primary": true,
+    "jurisdiction": "Cayman Islands / Global",
+    "le_portal_available": true,
+    "le_subpoena_guide": "https://www.binance.com/en/support/law-enforcement (Code of Criminal Procedure 91 / Mutual Legal Assistance Treaty)",
+    "deposit_pattern_match": "Multi-input sweep to hot wallet 14 with intermediate gas subsidization",
+    "evidence": [
+      {
+        "key": "deposit_cluster_match",
+        "label": "Deposit address cluster match",
+        "verified": true,
+        "confidence_weight": 0.28,
+        "description": "Deposit address shares common consolidation target (0x28C6c...1d60) within 2 blocks."
+      },
+      {
+        "key": "sweep_pattern",
+        "label": "Transaction pattern similarity",
+        "verified": true,
+        "confidence_weight": 0.22,
+        "description": "Swept entire remaining balance minus gas to known Binance omnibus hot wallet."
+      },
+      {
+        "key": "known_exchange_association",
+        "label": "Known exchange wallet association",
+        "verified": true,
+        "confidence_weight": 0.20,
+        "description": "Historical clustering correlates with Binance Deposit Omnibus Cluster #001."
+      },
+      {
+        "key": "historical_interaction",
+        "label": "Historical interaction pattern",
+        "verified": true,
+        "confidence_weight": 0.12,
+        "description": "Intermediary D sent 3 batch transactions conforming to Binance API auto-credit timestamps."
+      },
+      {
+        "key": "flow_proximity",
+        "label": "Fund-flow proximity",
+        "verified": true,
+        "confidence_weight": 0.09,
+        "description": "3 degrees of separation from suspect aggregator wallet (0x7A2F8C...91F)."
+      }
+    ]
+  },
+  {
+    "cluster_id": "VASP_COINBASE_01",
+    "vasp_name": "COINBASE",
+    "chain": "Ethereum",
+    "confidence_pct": 6.0,
+    "is_primary": false,
+    "jurisdiction": "United States (FinCEN Registered)",
+    "le_portal_available": true,
+    "le_subpoena_guide": "https://www.coinbase.com/legal/law-enforcement",
+    "deposit_pattern_match": "Occasional secondary dust interaction with US-regulated gateway",
+    "evidence": [
+      {
+        "key": "secondary_hop",
+        "label": "Secondary outflow correlation",
+        "verified": false,
+        "confidence_weight": 0.04,
+        "description": "Minor residual gas transfer matches Coinbase settlement cluster."
+      }
+    ]
+  },
+  {
+    "cluster_id": "VASP_KRAKEN_01",
+    "vasp_name": "KRAKEN",
+    "chain": "Ethereum",
+    "confidence_pct": 2.0,
+    "is_primary": false,
+    "jurisdiction": "United States (Payward Inc)",
+    "le_portal_available": true,
+    "le_subpoena_guide": "https://www.kraken.com/legal/compliance",
+    "deposit_pattern_match": "Historical cluster overlap from July 2026 test tx",
+    "evidence": []
+  },
+  {
+    "cluster_id": "VASP_OTHER_01",
+    "vasp_name": "OTHER / UNKNOWN VASP",
+    "chain": "Multi-chain",
+    "confidence_pct": 1.0,
+    "is_primary": false,
+    "jurisdiction": "Offshore",
+    "le_portal_available": false,
+    "le_subpoena_guide": "Requires Section 91 CrPC notice to ISP / exchange gateway",
+    "deposit_pattern_match": "Unattributed peer-to-peer over-the-counter desk",
+    "evidence": []
+  }
+]
