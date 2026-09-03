@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-gov-50: #f0f4f8;
+  --color-gov-100: #d9e2ec;
+  --color-gov-500: #102a43;
+  --color-gov-800: #0b69a3;
+  --color-gov-900: #031b33;
+  --color-forensic-victim: #2563eb;
+  --color-forensic-suspect: #dc2626;
+  --color-forensic-mule: #d97706;
+  --color-forensic-bridge: #6366f1;
+  --color-forensic-vasp: #16a34a;
+  --font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
 @layer base {
   :root {
     /* Enterprise Light Mode Palette */

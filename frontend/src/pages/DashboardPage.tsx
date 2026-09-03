@@ -46,21 +46,33 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       {/* Top Title Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-mono font-black text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-mono font-black text-slate-900 tracking-tight">
             Crypto Fraud Intelligence Dashboard
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 font-mono mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 font-mono mt-1">
             Real-time blockchain intelligence for cybercrime investigations &bull; NCRP Command Portal
           </p>
         </div>
 
-        <button
-          onClick={onViewGraph}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-cyan-500 hover:bg-cyan-400 text-black shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all cursor-pointer self-start sm:self-auto"
-        >
-          <Flame className="w-4 h-4 text-black" />
-          <span>OPEN TRANSACTION GRAPH</span>
-        </button>
+        <div className="flex items-center gap-4 self-start sm:self-auto">
+          {/* INR / USD Toggle */}
+          <div className="flex bg-slate-200 rounded-lg p-1">
+            <button className="px-3 py-1.5 rounded-md text-xs font-bold bg-white text-blue-700 shadow-sm cursor-pointer">
+              INR (₹)
+            </button>
+            <button className="px-3 py-1.5 rounded-md text-xs font-bold text-slate-500 hover:text-slate-700 cursor-pointer">
+              USD ($)
+            </button>
+          </div>
+
+          <button
+            onClick={onViewGraph}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-blue-700 hover:bg-blue-800 text-white shadow-md transition-all cursor-pointer"
+          >
+            <Flame className="w-4 h-4 text-white" />
+            <span>OPEN TRANSACTION GRAPH</span>
+          </button>
+        </div>
       </div>
 
       {/* Metric Cards Grid with Animated Counters */}
@@ -126,17 +138,37 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         />
       </div>
 
-      {/* Prominent Search Bar: "Analyze Suspect Wallet" */}
-      <div className="glass-panel-glow rounded-2xl p-6 border-cyan-500/30 shadow-2xl">
-        <div className="flex items-center gap-2 mb-3">
-          <Search className="w-5 h-5 text-cyan-400" />
-          <h2 className="font-mono text-base font-bold text-white uppercase tracking-wider">
-            Analyze Suspect Cryptocurrency Wallet
-          </h2>
+      {/* Prominent Search Bar & NCRP Import */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-md">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <Search className="w-5 h-5 text-blue-700" />
+              <h2 className="font-bold text-slate-900 uppercase tracking-wider">
+                Initiate Cybercrime Investigation
+              </h2>
+            </div>
+            <p className="text-xs text-slate-500 font-medium">
+              Manually enter a wallet address or auto-import from the NCRP API Gateway.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className="px-4 py-2 rounded-lg bg-blue-50 text-blue-700 font-bold text-xs border border-blue-200 shadow-sm hover:bg-blue-100 transition-colors flex items-center gap-2 cursor-pointer"
+            >
+              <FolderLock className="w-3.5 h-3.5" />
+              <span>IMPORT NCRP ACK NO.</span>
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-lg bg-red-50 text-red-700 font-bold text-xs border border-red-200 shadow-sm hover:bg-red-100 transition-colors flex items-center gap-2 cursor-pointer"
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>1930 RAPID FREEZE DRAWER</span>
+            </button>
+          </div>
         </div>
-        <p className="text-xs text-slate-400 font-mono mb-4">
-          Enter victim-reported wallet address to trace fund flows, map intermediaries, calculate risk score, and attribute destination VASP.
-        </p>
 
         <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-3">
           <div className="flex-1 relative">
@@ -145,7 +177,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               value={searchAddress}
               onChange={(e) => setSearchAddress(e.target.value)}
               placeholder="Paste suspect wallet address (e.g. 0x7A2F8C91F0328b9c24090954e3d389a91f)..."
-              className="w-full bg-slate-950/90 border border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-3 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner"
+              className="w-full bg-slate-50 border border-slate-300 focus:border-blue-500 rounded-xl px-4 py-3 text-sm font-mono text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-100 shadow-inner"
             />
           </div>
 
@@ -154,7 +186,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               value={selectedChain}
               onChange={(e) => setSelectedChain(e.target.value as Blockchain)}
               aria-label="Select blockchain for suspect wallet search"
-              className="bg-slate-900 border border-slate-700 text-slate-200 text-xs font-mono rounded-xl px-3.5 py-3 focus:border-cyan-400 focus:outline-none cursor-pointer"
+              className="bg-slate-50 border border-slate-300 text-slate-700 text-sm font-medium rounded-xl px-3.5 py-3 focus:border-blue-500 focus:outline-none cursor-pointer shadow-sm"
             >
               <option value="Ethereum">Ethereum</option>
               <option value="Polygon">Polygon</option>
@@ -164,7 +196,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono font-bold text-xs shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all flex items-center gap-2 cursor-pointer shrink-0"
+              className="px-6 py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm shadow-md transition-all flex items-center gap-2 cursor-pointer shrink-0"
             >
               <span>ANALYZE WALLET</span>
               <ArrowRight className="w-4 h-4" />
@@ -173,7 +205,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </form>
 
         {/* Quick Demo Fill link */}
-        <div className="mt-3 flex items-center gap-2 text-xs font-mono text-slate-500">
+        <div className="mt-3 flex items-center gap-2 text-xs font-medium text-slate-500">
           <span>Sample Investigated Suspect:</span>
           <button
             type="button"
@@ -181,7 +213,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               setSearchAddress(DEMO_SUSPECT_ADDRESS);
               setSelectedChain('Ethereum');
             }}
-            className="text-cyan-400 hover:underline cursor-pointer"
+            className="text-blue-600 hover:underline cursor-pointer"
           >
             {DEMO_SUSPECT_ADDRESS} (Investment Scam)
           </button>

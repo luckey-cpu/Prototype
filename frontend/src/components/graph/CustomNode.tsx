@@ -14,12 +14,14 @@ export interface CustomNodeData {
   outflowUsd: number;
   txCount: number;
   tags: string[];
+  xaiReasoning?: string;
+  moCluster?: string;
   [key: string]: unknown;
 }
 
 const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
   const nodeData = data as unknown as CustomNodeData;
-  const { address, label, walletType, riskLevel, riskScore, balanceUsd, inflowUsd, outflowUsd, txCount, tags } = nodeData;
+  const { address, label, walletType, riskLevel, riskScore, balanceUsd, inflowUsd, outflowUsd, txCount, tags, xaiReasoning, moCluster } = nodeData;
   const [expanded, setExpanded] = useState(false);
 
   let borderColor = 'border-slate-200';
@@ -163,6 +165,17 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
                   {t}
                 </span>
               ))}
+            </div>
+          )}
+          {xaiReasoning && (
+            <div className="pt-2 mt-2 border-t border-slate-100 group relative">
+              <div className="flex items-start gap-1 text-slate-700 bg-blue-50 border border-blue-100 p-1.5 rounded-lg">
+                <Activity className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
+                <div className="flex flex-col gap-0.5">
+                  <span className="font-bold text-[9px] text-blue-800 uppercase">{moCluster || 'XAI Inference'}</span>
+                  <span className="text-[9px] leading-tight text-slate-600">{xaiReasoning}</span>
+                </div>
+              </div>
             </div>
           )}
         </div>

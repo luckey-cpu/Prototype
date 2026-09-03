@@ -11,6 +11,8 @@ from app.api.system import router as system_router
 from app.api.antigravity import router as antigravity_router
 from app.api.routes import trace
 from app.api.routes import classify
+from app.api.routes import attribution
+from app.api.routes import audit
 
 app = FastAPI(
     title="BLUCE LOCK — Real-Time Crypto Fraud Attribution & VASP Intelligence Platform",
@@ -37,6 +39,8 @@ app.include_router(system_router)
 app.include_router(antigravity_router)
 app.include_router(trace.router, prefix="/api/v1/trace", tags=["Trace"])
 app.include_router(classify.router, prefix="/api/v1/classify-wallet", tags=["ML Classification"])
+app.include_router(attribution.router, prefix="/api/v1/attribution", tags=["Fraud Attribution"])
+app.include_router(audit.router, prefix="/api/v1/audit-trail", tags=["Audit & Security"])
 
 @app.on_event("startup")
 async def startup_event():
@@ -48,6 +52,10 @@ async def startup_event():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     logger.info("Postgres tables created (if not exist)")
+    
+    # Load PyTorch and XGBoost Models into Memory
+    from app.ml.inference import load_runtime_artifacts
+    load_runtime_artifacts()
 
 @app.get("/")
 def root():
