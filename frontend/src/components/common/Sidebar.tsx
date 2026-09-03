@@ -12,7 +12,10 @@ import {
   Settings,
   Flame,
   Layers,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck
 } from 'lucide-react';
 
 export type PageId =
@@ -43,6 +46,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpenOnMobile = false,
   onCloseMobile
 }) => {
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
   const navigationItems = [
     { id: 'forensic-workspace' as PageId, label: 'Forensic Console (SIH)', icon: Network, highlight: true },
     { id: 'dashboard' as PageId, label: 'Overview Dashboard', icon: LayoutDashboard },
@@ -62,24 +68,58 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (onCloseMobile) onCloseMobile();
   };
 
+  const filteredItems = navigationItems.filter(item => 
+    item.label.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const navContent = (
     <div className="flex flex-col justify-between h-full">
       <div className="space-y-1">
-        <div className="flex items-center justify-between px-3 py-2">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold">
-            Investigative Modules
-          </span>
+        
+        {/* Top Slim Banner for Demo Mode */}
+        {!isCollapsed && (
+          <div className="flex items-center justify-between px-3 py-1.5 mb-2 rounded border border-blue-200 bg-blue-50">
+            <div className="flex items-center gap-1.5 text-[10px] font-mono text-blue-700 font-bold">
+              <ShieldCheck className="w-3 h-3" />
+              DEMO MODE
+            </div>
+            <span className="text-[9px] font-bold text-slate-700 bg-white border border-slate-200 px-1 rounded shadow-sm">SIH EVAL</span>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200 mb-2">
+          {!isCollapsed && (
+            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold flex items-center gap-2">
+              <Layers className="w-3.5 h-3.5" /> Modules
+            </span>
+          )}
           {onCloseMobile && (
             <button
               onClick={onCloseMobile}
-              className="lg:hidden p-1 rounded-lg text-slate-400 hover:text-white"
+              className="lg:hidden p-1 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100"
             >
               <X className="w-4 h-4" />
             </button>
           )}
         </div>
 
-        {navigationItems.map((item) => {
+        {/* Sidebar Search Filter */}
+        {!isCollapsed && (
+          <div className="px-2 mb-3">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400" />
+              <input 
+                type="text" 
+                placeholder="Filter modules..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-md py-1.5 pl-7 pr-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400/30 focus:bg-white transition-colors"
+              />
+            </div>
+          </div>
+        )}
+
+        {filteredItems.map((item) => {
           const Icon = item.icon;
           const isActive = activePage === item.id;
 
@@ -87,26 +127,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => handleItemClick(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-mono font-medium transition-all duration-200 cursor-pointer text-left ${
+              title={isCollapsed ? item.label : undefined}
+              className={`w-full flex items-center justify-between py-2.5 rounded-r-lg rounded-l-sm text-xs font-mono font-bold transition-all duration-200 cursor-pointer text-left ${
                 isActive
-                  ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.18)]'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
-              }`}
+                  ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600 px-2'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-l-4 border-transparent px-3'
+              } ${isCollapsed ? 'justify-center px-0' : ''}`}
             >
               <div className="flex items-center gap-3">
-                <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
-                <span>{item.label}</span>
+                <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-slate-500 group-hover:text-slate-700'}`} />
+                {!isCollapsed && <span>{item.label}</span>}
               </div>
 
-              {item.highlight && !isActive && (
-                <span className="flex items-center gap-1 text-[9px] text-cyan-400 font-mono bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-800">
-                  <Flame className="w-2.5 h-2.5 text-cyan-400" />
+              {!isCollapsed && item.highlight && !isActive && (
+                <span className="flex items-center gap-1 text-[9px] text-blue-600 font-mono bg-blue-100 px-1.5 py-0.5 rounded border border-blue-200">
+                  <Flame className="w-2.5 h-2.5 text-blue-600" />
                   CORE
                 </span>
               )}
 
-              {item.badge !== undefined && item.badge > 0 && (
-                <span className="flex items-center justify-center px-1.5 py-0.2 min-w-4 text-[10px] font-bold rounded-full bg-red-500/20 text-red-400 border border-red-500/40">
+              {!isCollapsed && item.badge !== undefined && item.badge > 0 && (
+                <span className="flex items-center justify-center px-1.5 py-0.2 min-w-4 text-[10px] font-bold rounded-full bg-red-100 text-red-600 border border-red-200 shadow-sm">
                   {item.badge}
                 </span>
               )}
@@ -115,15 +156,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </div>
 
-      {/* Bottom Command Center Badge */}
-      <div className="p-3 rounded-lg bg-slate-900/80 border border-slate-800 text-[11px] font-mono text-slate-400 mt-4">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-slate-300 font-semibold">DEMO MODE</span>
-          <span className="text-cyan-400">ACTIVE</span>
-        </div>
-        <p className="text-[10px] text-slate-500 leading-tight">
-          Operating in synthetic forensic mode for SIH evaluation.
-        </p>
+      {/* Collapse Toggle Button */}
+      <div className="mt-4 pt-4 border-t border-slate-200 flex justify-center lg:justify-end">
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="hidden lg:flex p-1.5 rounded-lg bg-white border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors shadow-sm"
+        >
+          {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        </button>
       </div>
     </div>
   );
@@ -131,7 +171,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       {/* Desktop Sticky Sidebar */}
-      <aside className="hidden lg:flex w-64 shrink-0 border-r border-cyan-500/20 bg-[#070c18]/95 flex-col justify-between p-3 select-none h-[calc(100vh-4rem)] sticky top-16">
+      <aside className={`hidden lg:flex shrink-0 border-r border-slate-200 bg-white flex-col justify-between p-3 select-none h-[calc(100vh-3.5rem)] sticky top-14 transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'} shadow-sm`}>
         {navContent}
       </aside>
 
@@ -145,9 +185,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Mobile Slide-Out Drawer */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 w-72 z-50 bg-[#070c18] border-r border-cyan-500/30 p-4 select-none transform transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto ${
+        className={`fixed top-0 bottom-0 left-0 w-72 z-50 bg-white border-r border-slate-200 p-4 select-none transform transition-transform duration-300 ease-in-out lg:hidden overflow-y-auto ${
           isOpenOnMobile ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        } shadow-2xl`}
       >
         {navContent}
       </aside>

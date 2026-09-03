@@ -1,119 +1,95 @@
-# BLUCE LOCK 🛡️
-### Real-Time Crypto Fraud Attribution & VASP Intelligence Platform
-*National-Level Cybercrime Blockchain Forensics Command Center — Smart India Hackathon (SIH) Prototype*
+# 🛡️ BLUCE LOCK | High-Density Law Enforcement Workstation
+
+<div align="center">
+  <h3>Real-Time Crypto Fraud Attribution & VASP Intelligence Platform</h3>
+  <p><em>An enterprise-grade, Sec. 65B CrPC compliant blockchain forensics suite designed to accelerate cybercrime investigations, trace stolen assets, and automate statutory freeze notices.</em></p>
+</div>
 
 ---
 
-## 📌 Executive Summary
+## 🛑 The Challenge vs. ⚡ The Solution
 
-**BLUCE LOCK** is an intelligence platform engineered specifically for law enforcement officers, cybercrime police units, and financial intelligence analysts.
+**The Challenge:**
+Crypto-laundering operations exploit the speed of blockchains. When victims report fraud, threat actors utilize automated mule networks, peel-chains, and cross-chain bridges to obfuscate the fund flow. Manual tracing by law enforcement often results in dead ends, as funds are cashed out via centralized exchanges (VASPs) before freeze requests can be drafted.
 
-It takes a **victim-reported suspect cryptocurrency wallet address** and systematically de-anonymizes the fund trail into actionable statutory evidence by:
-1. **Multi-Chain Ledger Tracing**: Traces fund movements across Ethereum, Polygon, and major EVM/UTXO blockchains.
-2. **Interactive Transaction Flow Graph (Hero Feature)**: Visualizes fund hops using React Flow and Dagre layout with real-time moving flow particles.
-3. **Intermediary & Burner Wallet Identification**: Automatically isolates temporary pass-through mule addresses and peel chains.
-4. **Cross-Chain Bridge Forensics**: Tracks cross-chain liquidity pool transitions (e.g., Ethereum &rarr; Stargate Finance &rarr; Polygon).
-5. **VASP Attribution Engine**: Computes explainable probabilistic clustering attributing the likely destination cryptocurrency exchange (e.g. Binance 91% confidence) with an evidentiary checklist.
-6. **Explainable Risk Scoring Engine (0–100)**: Evaluates behavioral indicators (rapid forwarding &lt;300s, multiple victim inputs, peel chains, mixer proximity) with clear score breakdowns.
-7. **BLUCE AI Investigation Assistant**: Distinguishes verified ledger facts, heuristic inferences, and recommended legal directives (Section 91 CrPC notices, Section 102 CrPC freeze requisitions).
-8. **NCRP Case & Alert Management**: Tracks active investigation dockets and real-time alerts.
-9. **Forensic Report Generation**: Exports standardized PDF memorandums (via ReportLab), browser-optimized printouts, and structured JSON intelligence packages.
+**The Solution:**
+**BLUCE LOCK** operates as a high-density, real-time forensic workstation. It ingests suspect wallet addresses, automatically executes Multi-Hop Breadth-First Search (BFS) tracing, filters out noise (change wallets/burners), and accurately attributes the final destination to a registered VASP. It then generates court-ready statutory freeze notices (Sec. 91 / 102 CrPC) in one click.
 
 ---
 
-## 🏗️ Architectural Topology
+## 🎯 Core Capabilities
 
+- **Interactive Visual Fund Flow:** A Dagre-powered force-directed graph rendering real-time fund hops, identifying Victim, Mule Relay, Bridge, and Exchange nodes with precise semantic color coding.
+- **VASP Intelligence Engine:** Instantly flags the destination exchange with a probabilistic confidence score (e.g., *Binance: 91% Confidence*), extracting subpoena emails and target deposit addresses.
+- **Cross-Chain Bridge Tracking:** Seamlessly follows illicit asset movements across disparate networks (e.g., Ethereum → Polygon via Stargate).
+- **ML-Powered Risk Profiling:** Analyzes transaction velocity, contract bytecode presence, and clustering patterns to generate an automated 0-100 Threat Score.
+- **Automated Legal Dossiers:** Eliminates administrative overhead by auto-generating Sec. 91 CrPC notices and immutable Chain of Custody audit logs.
+
+---
+
+## 🏗️ System Architecture
+
+BLUCE LOCK utilizes a modern, decoupled microservices architecture optimized for rapid data ingestion and high-fidelity rendering.
+
+```mermaid
+graph LR
+    A[Victim Complaint / NCRP] -->|Input Hash/Address| B(FastAPI Backend)
+    B --> C{ML Tracing Engine}
+    C -->|GraphSAGE / XGBoost| D[Transaction Graph]
+    C -->|Pattern Matching| E[VASP Attribution]
+    D --> F[React 19 Frontend]
+    E --> F
+    F -->|Draft Notice| G[PDF Generator / ReportLab]
+    G --> H((Court-Ready Dossier))
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                       BLUCE LOCK UI                         │
-│             React 19 + Vite + Tailwind CSS + Dagre          │
-│          Interactive Transaction Graph (@xyflow/react)      │
-└──────────────────────────────┬──────────────────────────────┘
-                               │ REST / WebSocket (/ws/analysis)
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      FastAPI Backend                        │
-│                 Python 3.13 + Uvicorn Core                  │
-├─────────────────┬───────────────────┬───────────────────────┤
-│ Blockchain Svc  │ NetworkX Graph Svc│ Risk & VASP Engine    │
-│ Multi-chain RPC │ Betweenness & Path│ Heuristic Clustering  │
-├─────────────────┴───────────────────┴───────────────────────┤
-│            ReportLab PDF Forensic Generator Engine          │
-└─────────────────────────────────────────────────────────────┘
-```
+
+### 💻 Technology Stack
+
+| Layer | Technologies Used | Purpose |
+| :--- | :--- | :--- |
+| **Frontend UI** | React 19, TypeScript, Vite, Tailwind CSS | High-density, Enterprise Light Mode forensic console |
+| **Graph Renderer** | `@xyflow/react` (React Flow), Dagre | Auto-layout force-directed transaction mapping |
+| **Backend API** | FastAPI, Uvicorn, Python 3.11+ | Asynchronous REST endpoints and data orchestration |
+| **ML & Graph Engine** | NetworkX, PyTorch Geometric, XGBoost | Anomaly detection, node clustering, and pathfinding |
+| **Document Ops** | ReportLab | Immutable, legally compliant PDF generation |
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Quick Start & Deployment
 
-### 1. Launch Backend (FastAPI)
-```powershell
+### 1. Initialize the Backend Services
+The Python tracing engine handles graph generation and ML inference.
+
+```bash
 cd backend
+python -m venv venv
+# Activate virtual environment:
+# Windows: .\venv\Scripts\activate | Linux/macOS: source venv/bin/activate
+
+pip install -r requirements.txt
 python -m uvicorn app.main:app --reload --port 8000
 ```
-- API Docs & Swagger: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- Interactive OpenAPI: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+> *API Documentation automatically generated at:* `http://localhost:8000/docs`
 
-### 2. Launch Frontend (React + Vite)
-```powershell
+### 2. Launch the Forensic Console
+The React 19 frontend provides the visual workstation for analysts.
+
+```bash
 cd frontend
-npm run dev -- --host 0.0.0.0
+npm install
+npm run dev
 ```
-- **Local (Laptop)**: [http://localhost:5173](http://localhost:5173)
-- **Mobile / Wi-Fi Network**: [http://10.66.242.21:5173](http://10.66.242.21:5173) *(or your machine's local IPv4)*
-- Accessible from any smartphone (iOS / Android), tablet, or external laptop on the same network.
-- Features mobile slide-out drawer navigation, responsive bottom sheets for transaction graph inspectors, and adaptive SVG layouts.
-
-### 3. Run Automated Tests
-```powershell
-cd backend
-python -m pytest tests/test_api.py -v
-```
+> *Forensic Console live at:* `http://localhost:5173`
 
 ---
 
-## 🎬 2-to-3 Minute SIH Presentation Walkthrough
+## 🛡️ Operational Walkthrough
 
-1. **Landing Page**:
-   - Showcase the cybercrime command center design and animated blockchain particle background.
-   - Click **"Launch Investigation Console"** or **"View Demo Investigation"**.
-2. **Dashboard Command Center**:
-   - Highlight live metrics: Active Cases (128), Wallets Analyzed (2,841), Funds Traced (₹4.82 Cr), Avg Analysis Time (18s).
-   - Click **"DEMO MODE: LOAD SAMPLE INVESTIGATION"** (or paste Suspect Address `0x7A2F8C91F0328b9c24090954e3d389a91f`).
-3. **Radar Scanning Simulation**:
-   - Observe the multi-stage radar scanner validating addresses, building graph, evaluating velocity, and matching VASP clusters.
-4. **Wallet Analysis & Explainable Risk Gauge**:
-   - Note the **87/100 CRITICAL Risk Rating**.
-   - Review the **Detected Risk Indicators** cards (Rapid Forwarding, Layering, Cross-Chain, Exchange Sweep).
-5. **Hero Feature: Interactive Transaction Graph**:
-   - Observe moving particle flow along edges representing fund transfer velocity.
-   - Click **Victim Wallets** &rarr; **Suspect Wallet** &rarr; **Intermediary C** &rarr; **Binance Cluster**.
-   - Click any node to open the **Node Inspector Drawer**; click any edge to open the **Transaction Edge Inspector**.
-6. **Cross-Chain Hop Analysis**:
-   - Review the Ethereum &rarr; Stargate &rarr; Polygon flow diagram breaking linear chain-hopping obfuscation.
-7. **VASP Intelligence**:
-   - Review **BINANCE (91% Confidence)** with the large circular confidence meter and verified evidence checklist.
-8. **BLUCE AI Investigation Assistant**:
-   - Note the strict separation of **Observed Facts**, **Inferred Patterns**, and **Investigative Directives**.
-   - Review the pre-drafted **Section 91 CrPC Requisition Notice**.
-9. **Official Report Generation**:
-   - Click **"DOWNLOAD REPORT (PDF)"** to trigger ReportLab PDF generation or use **"PRINT REPORT"** / **"EXPORT JSON"**.
+1. **Initialize Investigation:** Access the dashboard and load an active case file (e.g., `NCRP-2026-00182`).
+2. **Analyze the Flow:** Utilize the floating control dock (MiniMap, Zoom, Layout Toggles) to inspect the animated flow of funds from the victim's wallet through intermediary mules.
+3. **Inspect the VASP Hit:** Open the right-side **VASP INTELLIGENCE** tab to review the attributed exchange and the evidentiary checklist.
+4. **Draft Freeze Notice:** Click **Draft Sec. 91 Notice** to trigger the automated modal, verify the auto-filled deposit address and subpoena target, and generate the final PDF dossier.
 
 ---
 
-## ⚡ AntiGravity™ Advanced Intelligence Engine
-
-The platform integrates the specialized **AntiGravity™ Engine** for algorithmic heuristics and forensic intelligence:
-- **Predictive Routing**: Bayesian Dirichlet-Multinomial transition matrix forecasting next-hop VASP deposits and bridge vectors.
-- **Peel Chain Collapsing**: Shannon-entropy discriminator separating malicious laundering peels from exchange hot sweeps ($65\%+$ visual reduction).
-- **Legal NLP Generation**: Courtroom-ready Section 65B IEA / Section 63 BSA certificates and Section 91/102 CrPC notices.
-- **Mule Feeder Clustering**: 24-hour sliding window anomaly detection for structured smurfing rings.
-- **ZK Evidence Notarization**: SHA-256 Merkle root commitment to Polygon POS for digital tamper-proofing.
-- **Threat Intel Federation**: Instant screening against OFAC SDN, Chainabuse, and darknet indexers.
-- **Fiat Off-Ramp Correlation**: Probability matrix correlating VASP operating hours and banking clearing windows (IMPS/UPI, AED, SEPA, Fedwire).
-- **Master 150+ Feature Expansion Backlog**: Full categorized specifications across 6 investigation domains in [`docs/ANTIGRAVITY_ENGINE_SPEC.md`](docs/ANTIGRAVITY_ENGINE_SPEC.md).
-
----
-
-## ⚖️ Legal & Ethical Compliance
-BLUCE LOCK is an investigative decision-support prototype. Attribution findings are probabilistic and require statutory verification by authorized law enforcement officers through appropriate legal notices under Section 91 & Section 102 of the Code of Criminal Procedure, 1973 / Bharatiya Nagarik Suraksha Sanhita (BNSS).
+*BLUCE LOCK — Precision tools for modern cybercrime enforcement.*

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { BaseEdge, EdgeProps, getSmoothStepPath, EdgeLabelRenderer } from '@xyflow/react';
+import { BaseEdge, EdgeProps, getBezierPath, EdgeLabelRenderer } from '@xyflow/react';
 
 export interface ParticleEdgeData {
   amountUsd?: number;
@@ -24,14 +24,13 @@ const ParticleEdge: React.FC<EdgeProps> = ({
   data,
   selected
 }) => {
-  const [edgePath, labelX, labelY] = getSmoothStepPath({
+  const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
     targetX,
     targetY,
-    targetPosition,
-    borderRadius: 16
+    targetPosition
   });
 
   const edgeData = data as unknown as ParticleEdgeData;
@@ -82,14 +81,14 @@ const ParticleEdge: React.FC<EdgeProps> = ({
           className="cursor-pointer"
         >
           <div
-            className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold backdrop-blur-md border transition-all duration-200 ${
+            className={`px-2 py-0.5 rounded border text-xs font-mono font-semibold transition-all duration-200 bg-white ${
               selected
-                ? 'bg-cyan-950 text-cyan-300 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.5)] scale-110'
-                : 'bg-slate-900/90 text-slate-300 border-slate-700/80 hover:border-cyan-500/50'
+                ? 'text-blue-700 border-blue-400 shadow-md scale-110'
+                : 'text-slate-800 border-slate-200 shadow-sm hover:border-blue-300'
             }`}
           >
             ${amountUsd ? amountUsd.toLocaleString() : '0'} {token}
-            {isCrossChain && <span className="ml-1 text-purple-400">🔗</span>}
+            {isCrossChain && <span className="ml-1 text-purple-600">🔗</span>}
           </div>
         </div>
       </EdgeLabelRenderer>

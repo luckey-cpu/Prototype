@@ -9,6 +9,8 @@ from app.api.reports import router as reports_router
 from app.api.ai import router as ai_router
 from app.api.system import router as system_router
 from app.api.antigravity import router as antigravity_router
+from app.api.routes import trace
+from app.api.routes import classify
 
 app = FastAPI(
     title="BLUCE LOCK — Real-Time Crypto Fraud Attribution & VASP Intelligence Platform",
@@ -33,6 +35,19 @@ app.include_router(reports_router)
 app.include_router(ai_router)
 app.include_router(system_router)
 app.include_router(antigravity_router)
+app.include_router(trace.router, prefix="/api/v1/trace", tags=["Trace"])
+app.include_router(classify.router, prefix="/api/v1/classify-wallet", tags=["ML Classification"])
+
+@app.on_event("startup")
+async def startup_event():
+    from app.db.session import engine
+    from app.db.postgres_models import Base
+    import structlog
+    logger = structlog.get_logger()
+    logger.info("Application starting up... Initializing DB...")
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    logger.info("Postgres tables created (if not exist)")
 
 @app.get("/")
 def root():

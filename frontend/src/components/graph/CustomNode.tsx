@@ -22,52 +22,52 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
   const { address, label, walletType, riskLevel, riskScore, balanceUsd, inflowUsd, outflowUsd, txCount, tags } = nodeData;
   const [expanded, setExpanded] = useState(false);
 
-  let borderColor = 'border-slate-700';
-  let glowColor = 'shadow-[0_0_15px_rgba(18,24,41,0.5)]';
-  let iconBg = 'bg-slate-800 text-slate-300';
+  let borderColor = 'border-slate-200';
+  let glowColor = 'shadow-sm';
+  let iconBg = 'bg-slate-100 text-slate-500 border-slate-200';
   let Icon = User;
   let typeLabel = 'Wallet';
 
   switch (walletType) {
     case 'Victim':
-      borderColor = 'border-[#00F0FF]/60';
-      glowColor = 'shadow-[0_0_20px_rgba(0,240,255,0.25)]';
-      iconBg = 'bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/40';
+      borderColor = 'border-blue-200';
+      glowColor = 'shadow-md';
+      iconBg = 'bg-blue-50 text-blue-600 border-blue-200';
       Icon = User;
       typeLabel = 'Victim Inflow';
       break;
     case 'Suspect':
-      borderColor = 'border-[#FF3366]';
-      glowColor = 'shadow-[0_0_25px_rgba(255,51,102,0.45)] animate-pulse';
-      iconBg = 'bg-[#FF3366]/20 text-[#FF3366] border-[#FF3366]/50';
+      borderColor = 'border-red-200';
+      glowColor = 'shadow-md animate-pulse';
+      iconBg = 'bg-red-50 text-red-600 border-red-200';
       Icon = AlertOctagon;
       typeLabel = 'Suspect Aggregator';
       break;
     case 'Intermediary / Burner':
-      borderColor = 'border-[#FFB703]/70';
-      glowColor = 'shadow-[0_0_20px_rgba(255,183,3,0.25)]';
-      iconBg = 'bg-[#FFB703]/20 text-[#FFB703] border-[#FFB703]/40';
+      borderColor = 'border-amber-200';
+      glowColor = 'shadow-md';
+      iconBg = 'bg-amber-50 text-amber-600 border-amber-200';
       Icon = Repeat;
       typeLabel = 'Intermediary Mule';
       break;
     case 'Bridge / Protocol':
-      borderColor = 'border-[#9D4EDD]/80';
-      glowColor = 'shadow-[0_0_20px_rgba(157,78,221,0.3)]';
-      iconBg = 'bg-[#9D4EDD]/20 text-[#9D4EDD] border-[#9D4EDD]/40';
+      borderColor = 'border-indigo-200';
+      glowColor = 'shadow-md';
+      iconBg = 'bg-indigo-50 text-indigo-600 border-indigo-200';
       Icon = ArrowRightLeft;
       typeLabel = 'Cross-Chain Bridge';
       break;
     case 'DEX':
-      borderColor = 'border-indigo-500/80';
-      glowColor = 'shadow-[0_0_20px_rgba(99,102,241,0.25)]';
-      iconBg = 'bg-indigo-500/20 text-indigo-400 border-indigo-500/40';
+      borderColor = 'border-indigo-200';
+      glowColor = 'shadow-md';
+      iconBg = 'bg-indigo-50 text-indigo-600 border-indigo-200';
       Icon = ArrowRightLeft;
       typeLabel = 'DEX Liquidity';
       break;
     case 'Exchange / VASP':
-      borderColor = 'border-[#00E676]';
-      glowColor = 'shadow-[0_0_30px_rgba(0,230,118,0.5)]';
-      iconBg = 'bg-[#00E676]/20 text-[#00E676] border-[#00E676]/50';
+      borderColor = 'border-emerald-200';
+      glowColor = 'shadow-md';
+      iconBg = 'bg-emerald-50 text-emerald-600 border-emerald-200';
       Icon = Landmark;
       typeLabel = 'Verified VASP Hit';
       break;
@@ -81,9 +81,9 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
 
   return (
     <div
-      className={`relative min-w-[220px] rounded-xl bg-[#121829] border ${borderColor} p-3 select-none transition-all duration-200 cursor-pointer ${
+      className={`relative min-w-[250px] rounded-xl bg-white border ${borderColor} p-4 select-none transition-all duration-200 cursor-pointer ${
         selected
-          ? 'ring-2 ring-[#00F0FF] scale-105 ' + glowColor
+          ? 'ring-2 ring-blue-500 scale-105 ' + glowColor
           : glowColor
       }`}
     >
@@ -91,7 +91,7 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
       <Handle
         type="target"
         position={Position.Left}
-        className="!w-2.5 !h-2.5 !bg-[#00F0FF] !border-2 !border-[#0A0E1A]"
+        className="!w-2.5 !h-2.5 !bg-blue-500 !border-2 !border-white"
       />
 
       {/* Main Node Header */}
@@ -101,10 +101,10 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
             <Icon className="w-4 h-4" />
           </div>
           <div className="overflow-hidden text-left">
-            <p className="font-mono text-xs font-bold text-white truncate max-w-[125px]" title={label}>
+            <p className="font-mono text-[13px] font-extrabold text-slate-800 truncate max-w-[145px]" title={label}>
               {label || typeLabel}
             </p>
-            <p className="font-mono text-[10px] text-slate-400 truncate" title={address}>
+            <p className="font-mono text-[10px] text-slate-500 truncate" title={address}>
               {shortAddr}
             </p>
           </div>
@@ -116,25 +116,25 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
             e.stopPropagation();
             setExpanded(!expanded);
           }}
-          className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          className="p-1 rounded-md text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500"
           title={expanded ? 'Collapse details' : 'Expand micro-metrics'}
         >
-          {expanded ? <ChevronUp className="w-3.5 h-3.5 text-[#00F0FF]" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          {expanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5" />}
         </button>
       </div>
 
       {/* Primary Badge & Balance */}
-      <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-slate-800/90">
-        <span className="text-slate-400">Bal: ${(balanceUsd || 0).toLocaleString()}</span>
+      <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-slate-100">
+        <span className="text-slate-600">Bal: ${(balanceUsd || 0).toLocaleString()}</span>
         <span
           className={`font-semibold px-1.5 py-0.2 rounded text-[9px] ${
             riskLevel === 'CRITICAL'
-              ? 'bg-red-950 text-[#FF3366] border border-[#FF3366]/50'
+              ? 'bg-red-50 text-red-700 border border-red-200'
               : riskLevel === 'HIGH'
-              ? 'bg-amber-950 text-[#FFB703] border border-[#FFB703]/50'
+              ? 'bg-amber-50 text-amber-700 border border-amber-200'
               : riskLevel === 'MEDIUM'
-              ? 'bg-yellow-950 text-yellow-300 border border-yellow-800/50'
-              : 'bg-emerald-950 text-[#00E676] border border-[#00E676]/50'
+              ? 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+              : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
           }`}
         >
           {riskScore}/100 {riskLevel}
@@ -143,23 +143,23 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
 
       {/* Expandable Micro-Interactions Drawer in Node */}
       {expanded && (
-        <div className="mt-2.5 pt-2 border-t border-slate-800/80 text-[10px] font-mono space-y-1.5 animate-in fade-in duration-200">
-          <div className="flex items-center justify-between text-slate-300">
+        <div className="mt-2.5 pt-2 border-t border-slate-100 text-[10px] font-mono space-y-1.5 animate-in fade-in duration-200">
+          <div className="flex items-center justify-between text-slate-500">
             <span>Inflow:</span>
-            <span className="text-[#00F0FF] font-bold">+${(inflowUsd || 0).toLocaleString()}</span>
+            <span className="text-blue-600 font-bold">+${(inflowUsd || 0).toLocaleString()}</span>
           </div>
-          <div className="flex items-center justify-between text-slate-300">
+          <div className="flex items-center justify-between text-slate-500">
             <span>Outflow:</span>
-            <span className="text-slate-300 font-bold">-${(outflowUsd || 0).toLocaleString()}</span>
+            <span className="text-slate-600 font-bold">-${(outflowUsd || 0).toLocaleString()}</span>
           </div>
-          <div className="flex items-center justify-between text-slate-300">
+          <div className="flex items-center justify-between text-slate-500">
             <span>Transactions:</span>
-            <span className="text-white font-bold">{txCount || 1} txs</span>
+            <span className="text-slate-800 font-bold">{txCount || 1} txs</span>
           </div>
           {tags && tags.length > 0 && (
             <div className="pt-1 flex flex-wrap gap-1">
               {tags.map((t, idx) => (
-                <span key={idx} className="px-1 py-0.5 rounded bg-slate-800 text-[8px] text-slate-300">
+                <span key={idx} className="px-1 py-0.5 rounded bg-slate-50 border border-slate-200 text-[8px] text-slate-600">
                   {t}
                 </span>
               ))}
@@ -172,7 +172,7 @@ const CustomNode: React.FC<NodeProps> = ({ data, selected }) => {
       <Handle
         type="source"
         position={Position.Right}
-        className="!w-2.5 !h-2.5 !bg-[#00F0FF] !border-2 !border-[#0A0E1A]"
+        className="!w-2.5 !h-2.5 !bg-blue-500 !border-2 !border-white"
       />
     </div>
   );

@@ -64,6 +64,12 @@ export function App() {
     setCurrentPage('wallet-analysis');
   };
 
+  const handleGlobalSearch = (query: string) => {
+    setActiveWallet(query);
+    setIsSampleScanning(true);
+    setCurrentPage('forensic-workspace');
+  };
+
   // Case docket selection
   const handleSelectCase = (c: CaseData) => {
     setSelectedCase(c);
@@ -82,7 +88,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#060913] text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-black font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col selection:bg-blue-100 selection:text-blue-900 font-sans">
       {/* Radar Scanner Modal for Sample Investigation flow */}
       <RadarScannerModal
         isOpen={isSampleScanning}
@@ -98,6 +104,7 @@ export function App() {
         onNavigateHome={() => setCurrentPage('dashboard')}
         isMobileMenuOpen={isMobileMenuOpen}
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        onSearch={handleGlobalSearch}
       />
 
       {/* Main Layout: Sidebar + Page Container */}
@@ -110,8 +117,8 @@ export function App() {
           onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
 
-        <main className="flex-1 overflow-y-auto bg-gradient-to-b from-[#0A0E1A] to-[#070c18]">
-          {currentPage === 'forensic-workspace' && <ForensicWorkspace />}
+        <main className="flex-1 overflow-y-auto bg-slate-50">
+          {currentPage === 'forensic-workspace' && <ForensicWorkspace initialAddress={activeWallet} />}
 
           {currentPage === 'dashboard' && (
             <DashboardPage

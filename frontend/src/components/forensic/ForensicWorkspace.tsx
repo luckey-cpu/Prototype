@@ -28,7 +28,8 @@ import {
   AlertTriangle,
   RotateCcw,
   SlidersHorizontal,
-  Download
+  Download,
+  Archive
 } from 'lucide-react';
 import CustomNode, { CustomNodeData } from '../graph/CustomNode';
 import ParticleEdge from '../graph/ParticleEdge';
@@ -60,15 +61,15 @@ const edgeTypes = {
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 240;
-const nodeHeight = 110;
+const nodeWidth = 260;
+const nodeHeight = 130;
 
 const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'LR') => {
   const isHorizontal = direction === 'LR';
   dagreGraph.setGraph({
     rankdir: direction,
-    nodesep: 45,
-    ranksep: 90,
+    nodesep: 80,
+    ranksep: 160,
     marginx: 30,
     marginy: 30
   });
@@ -99,12 +100,11 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'LR') => 
   return { nodes: layoutedNodes, edges };
 };
 
-export const ForensicWorkspace: React.FC = () => {
-  // Ingest state
-  const [addressInput, setAddressInput] = useState(DEMO_SUSPECT_ADDRESS);
-  const [selectedChain, setSelectedChain] = useState<Blockchain>('Ethereum');
-  const [isScanning, setIsScanning] = useState(false);
+export interface ForensicWorkspaceProps {
+  initialAddress?: string;
+}
 
+export const ForensicWorkspace: React.FC<ForensicWorkspaceProps> = ({ initialAddress = DEMO_SUSPECT_ADDRESS }) => {
   // Filter state
   const [chainFilter, setChainFilter] = useState<ChainFilter>('ALL');
   const [direction, setDirection] = useState<'LR' | 'TB'>('LR');
@@ -114,6 +114,9 @@ export const ForensicWorkspace: React.FC = () => {
   const [selectedTxData, setSelectedTxData] = useState<TransactionData | null>(null);
   const [isFreezeModalOpen, setIsFreezeModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [activePanel, setActivePanel] = useState<'vasp' | 'timeline' | 'ai'>('vasp');
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [rightPanelWidth, setRightPanelWidth] = useState(40); // percentage
 
   // Filter wallets according to chain protocol
   const filteredWallets = useMemo(() => {
@@ -228,37 +231,41 @@ export const ForensicWorkspace: React.FC = () => {
     }
   }, []);
 
-  const handleStartAnalysis = (e: React.FormEvent) => {
+  const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
+    setHoveredNode(node.id);
+  }, []);
+
+  const onNodeMouseLeave = useCallback(() => {
+    setHoveredNode(null);
+  }, []);
+
+  const handleDrag = useCallback((e: MouseEvent) => {
+    const newWidth = ((window.innerWidth - e.clientX) / window.innerWidth) * 100;
+    if (newWidth >= 25 && newWidth <= 55) {
+      setRightPanelWidth(newWidth);
+    }
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    document.removeEventListener('mousemove', handleDrag);
+    document.removeEventListener('mouseup', handleDragEnd);
+  }, [handleDrag]);
+
+  const handleDragStart = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    if (!addressInput.trim()) return;
-    setIsScanning(true);
-  };
-
-  const handleScanComplete = () => {
-    setIsScanning(false);
-  };
-
-  const handleLoadSample = () => {
-    setAddressInput(DEMO_SUSPECT_ADDRESS);
-    setIsScanning(true);
-  };
+    document.addEventListener('mousemove', handleDrag);
+    document.addEventListener('mouseup', handleDragEnd);
+  }, [handleDrag, handleDragEnd]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4.25rem)] overflow-hidden bg-[#0A0E1A] text-slate-100 selection:bg-[#00F0FF] selection:text-black">
-      {/* Radar Scanner Modal */}
-      <RadarScannerModal
-        isOpen={isScanning}
-        walletAddress={addressInput}
-        onComplete={handleScanComplete}
-      />
-
+    <div className="flex flex-col h-[calc(100vh-4.25rem)] overflow-hidden bg-slate-50 text-slate-800 selection:bg-blue-100 selection:text-blue-900">
       {/* Freeze Notice Modal (Section 91 & 102 CrPC) */}
       <FreezeNoticeModal
         isOpen={isFreezeModalOpen}
         onClose={() => setIsFreezeModalOpen(false)}
         targetVASP="BINANCE"
         depositCluster="0x28C6c06298d514Db089934071355E5743bf21d60"
-        suspectAddress={addressInput}
+        suspectAddress={initialAddress}
       />
 
       {/* Standardized LEA Investigation Report Modal */}
@@ -269,87 +276,55 @@ export const ForensicWorkspace: React.FC = () => {
       />
 
       {/* ========================================================================= */}
-      {/* TOP BAR: Search/Ingest, NCRP/SAHYOG Tag, Network Status Badge              */}
+      {/* WORKSPACE ACTION BAR: NCRP Tag & Actions                                  */}
       {/* ========================================================================= */}
-      <div className="shrink-0 border-b border-slate-800/80 bg-[#121829] px-4 py-2.5 flex flex-col md:flex-row items-center justify-between gap-3 shadow-md z-20">
-        {/* Left: Search / Ingest Input */}
-        <form onSubmit={handleStartAnalysis} className="flex items-center gap-2 w-full md:w-auto flex-1 max-w-2xl">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 text-[#00F0FF] absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={addressInput}
-              onChange={(e) => setAddressInput(e.target.value)}
-              placeholder="Ingest victim-reported suspect wallet address (e.g. 0x7A2F...91F)..."
-              className="w-full bg-[#0A0E1A] border border-slate-700/80 focus:border-[#00F0FF] rounded-xl pl-9 pr-3 py-1.5 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-[#00F0FF]"
-            />
-          </div>
-
-          <select
-            value={selectedChain}
-            onChange={(e) => setSelectedChain(e.target.value as Blockchain)}
-            aria-label="Target Chain"
-            className="bg-[#0A0E1A] border border-slate-700 text-slate-200 text-xs font-mono rounded-xl px-2.5 py-1.5 focus:border-[#00F0FF] focus:outline-none cursor-pointer"
-          >
-            <option value="Ethereum">Ethereum</option>
-            <option value="Polygon">Polygon</option>
-            <option value="BNB Chain">BNB Chain</option>
-            <option value="Bitcoin">Bitcoin (UTXO)</option>
-            <option value="Solana">Solana (SPL)</option>
-          </select>
-
-          <button
-            type="submit"
-            className="px-3.5 py-1.5 rounded-xl bg-[#00F0FF] hover:bg-[#00F0FF]/80 text-black font-mono font-bold text-xs shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
-          >
-            <span>INGEST</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </form>
-
-        {/* Center/Right: NCRP/SAHYOG Tag & Network Status */}
-        <div className="flex flex-wrap items-center gap-2.5 justify-end w-full md:w-auto">
+      <div className="shrink-0 border-b border-slate-200 bg-white px-4 py-2 flex items-center justify-between shadow-sm z-20">
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-mono font-bold text-slate-500">ACTIVE WORKSPACE:</span>
           {/* NCRP/SAHYOG Complaint Tag */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-950/60 border border-[#FF3366]/40 text-[#FF3366] text-xs font-mono font-bold shadow-[0_0_12px_rgba(255,51,102,0.2)]">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-50 border border-red-200 text-red-600 text-xs font-mono font-bold shadow-sm">
             <Shield className="w-3.5 h-3.5" />
             <span>{DEMO_NCRP_SAHYOG_ID}</span>
           </div>
+        </div>
 
-          {/* Network Status Badge */}
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#0A0E1A] border border-slate-800 text-xs font-mono">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E676] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E676]" />
-            </span>
-            <span className="text-slate-400 text-[11px]">STATUS:</span>
-            <span className="text-[#00E676] font-semibold text-[11px]">ONLINE &bull; LIVE INGEST ACTIVE</span>
-          </div>
-
+        <div className="flex items-center gap-2.5">
+          {/* Export Case Archive Trigger */}
+          <button
+            className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono font-bold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-400 shadow-sm transition-all cursor-pointer"
+          >
+            <Archive className="w-3.5 h-3.5" />
+            <span>EXPORT CASE ARCHIVE</span>
+          </button>
+          
           {/* Report Modal Trigger */}
           <button
             onClick={() => setIsReportModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono font-bold bg-[#121829] hover:bg-slate-800 text-[#00F0FF] border border-[#00F0FF]/40 hover:border-[#00F0FF] shadow-[0_0_12px_rgba(0,240,255,0.2)] transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono font-bold bg-white hover:bg-slate-50 text-blue-600 border border-blue-200 hover:border-blue-400 shadow-sm transition-all cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>LEA REPORT</span>
+            <span>GENERATE LEA REPORT</span>
           </button>
         </div>
       </div>
 
       {/* ========================================================================= */}
-      {/* 60% / 40% SPLIT SCREEN WORKSPACE                                          */}
+      {/* 2-Column Split: Graph (Left) & Inspector (Right)                          */}
       {/* ========================================================================= */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden p-3 gap-3">
+      <div className="flex-1 flex flex-col lg:flex-row p-4 overflow-hidden relative">
         {/* ======================================================================= */}
-        {/* LEFT PANEL (60%): Interactive Multi-Chain Fund Flow Graph               */}
+        {/* LEFT PANEL: Interactive Graph Visualization Canvas                      */}
         {/* ======================================================================= */}
-        <div className="lg:w-[60%] flex flex-col rounded-2xl bg-[#121829] border border-[#00F0FF]/20 overflow-hidden shadow-xl relative min-h-[480px]">
+        <div 
+          className="flex-1 flex flex-col rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden shadow-sm relative min-h-[480px]"
+          style={{ width: `calc(${100 - rightPanelWidth}% - 0.5rem)` }}
+        >
           {/* Graph Top Filter Bar */}
-          <div className="p-2.5 border-b border-slate-800/80 bg-[#0A0E1A]/80 backdrop-blur-md flex flex-wrap items-center justify-between gap-2 z-10">
+          <div className="p-2.5 border-b border-slate-200 bg-white/90 backdrop-blur-md flex flex-wrap items-center justify-between gap-2 z-10">
             {/* Chain Protocol Filters */}
             <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono">
-              <span className="text-slate-400 mr-1 flex items-center gap-1">
-                <Filter className="w-3.5 h-3.5 text-[#00F0FF]" />
+              <span className="text-slate-500 mr-1 flex items-center gap-1">
+                <Filter className="w-3.5 h-3.5 text-blue-600" />
                 <span className="hidden sm:inline">Filter:</span>
               </span>
 
@@ -357,8 +332,8 @@ export const ForensicWorkspace: React.FC = () => {
                 onClick={() => setChainFilter('ALL')}
                 className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                   chainFilter === 'ALL'
-                    ? 'bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/50 font-bold'
-                    : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+                    ? 'bg-blue-100 text-blue-700 border border-blue-300 font-bold'
+                    : 'text-slate-500 hover:text-slate-800 bg-white border border-slate-200 shadow-sm'
                 }`}
               >
                 All Chains ({DEMO_WALLETS.length})
@@ -368,8 +343,8 @@ export const ForensicWorkspace: React.FC = () => {
                 onClick={() => setChainFilter('EVM')}
                 className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                   chainFilter === 'EVM'
-                    ? 'bg-[#00F0FF]/20 text-[#00F0FF] border border-[#00F0FF]/50 font-bold'
-                    : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+                    ? 'bg-blue-100 text-blue-700 border border-blue-300 font-bold'
+                    : 'text-slate-500 hover:text-slate-800 bg-white border border-slate-200 shadow-sm'
                 }`}
               >
                 EVM (ETH &bull; POL &bull; BNB)
@@ -379,8 +354,8 @@ export const ForensicWorkspace: React.FC = () => {
                 onClick={() => setChainFilter('BITCOIN')}
                 className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                   chainFilter === 'BITCOIN'
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 font-bold'
-                    : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+                    ? 'bg-amber-50 text-amber-700 border border-amber-300 font-bold'
+                    : 'text-slate-500 hover:text-slate-800 bg-white border border-slate-200 shadow-sm'
                 }`}
               >
                 Bitcoin (UTXO)
@@ -390,8 +365,8 @@ export const ForensicWorkspace: React.FC = () => {
                 onClick={() => setChainFilter('SOLANA')}
                 className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                   chainFilter === 'SOLANA'
-                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50 font-bold'
-                    : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+                    ? 'bg-purple-50 text-purple-700 border border-purple-300 font-bold'
+                    : 'text-slate-500 hover:text-slate-800 bg-white border border-slate-200 shadow-sm'
                 }`}
               >
                 Solana (SPL)
@@ -401,35 +376,32 @@ export const ForensicWorkspace: React.FC = () => {
                 onClick={() => setChainFilter('BRIDGES')}
                 className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                   chainFilter === 'BRIDGES'
-                    ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/50 font-bold'
-                    : 'text-slate-400 hover:text-white bg-slate-900 border border-slate-800'
+                    ? 'bg-indigo-50 text-indigo-700 border border-indigo-300 font-bold'
+                    : 'text-slate-500 hover:text-slate-800 bg-white border border-slate-200 shadow-sm'
                 }`}
               >
                 Bridges (Stargate/LayerZero)
               </button>
             </div>
 
-            {/* Layout Toggle */}
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => setDirection(direction === 'LR' ? 'TB' : 'LR')}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-[#00F0FF] transition-colors cursor-pointer"
-                title="Toggle Graph Direction"
-              >
-                <GitFork className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{direction === 'LR' ? 'Horizontal' : 'Vertical'}</span>
-              </button>
             </div>
-          </div>
 
           {/* Interactive React Flow Canvas */}
           <div className="flex-1 relative w-full h-full">
             <ReactFlow
-              nodes={nodes}
-              edges={edges}
+              nodes={nodes.map((n) => ({
+                ...n,
+                className: hoveredNode && n.id !== hoveredNode && !edges.some(e => (e.source === hoveredNode && e.target === n.id) || (e.target === hoveredNode && e.source === n.id)) ? 'opacity-30 transition-opacity' : 'transition-opacity'
+              }))}
+              edges={edges.map((e) => ({
+                ...e,
+                className: hoveredNode && e.source !== hoveredNode && e.target !== hoveredNode ? 'opacity-10 transition-opacity' : 'transition-opacity'
+              }))}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onNodeClick={onNodeClick}
+              onNodeMouseEnter={onNodeMouseEnter}
+              onNodeMouseLeave={onNodeMouseLeave}
               onEdgeClick={onEdgeClick}
               nodeTypes={nodeTypes}
               edgeTypes={edgeTypes}
@@ -439,44 +411,61 @@ export const ForensicWorkspace: React.FC = () => {
               maxZoom={1.8}
               defaultEdgeOptions={{ animated: true }}
             >
-              <Background color="#00F0FF" gap={24} size={1} style={{ opacity: 0.08 }} />
-              <Controls className="!bg-[#121829] !border-slate-800 !fill-slate-300" />
+              <Background color="#cbd5e1" gap={24} size={1} />
+            {/* Floating Control Dock */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 bg-white/90 backdrop-blur-md px-3 py-2 rounded-2xl shadow-lg border border-slate-200">
+              
+              {/* Bottom Legend */}
+              <div className="hidden lg:flex items-center gap-3 px-2 text-[10px] font-mono text-slate-600">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-blue-600" />
+                  Victim
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                  Suspect
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-500" />
+                  Mule Relay
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-indigo-600" />
+                  Bridge
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                  Verified VASP
+                </span>
+              </div>
+              
+              <div className="w-px h-8 bg-slate-200 hidden lg:block mx-1"></div>
+
+              {/* Layout Toggle */}
+              <button
+                onClick={() => setDirection(direction === 'LR' ? 'TB' : 'LR')}
+                className="flex items-center justify-center gap-1 w-8 h-8 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-blue-600 transition-colors shadow-sm cursor-pointer"
+                title="Toggle Graph Direction"
+              >
+                <GitFork className="w-4 h-4" />
+              </button>
+
+              <Controls className="!relative !bottom-0 !left-0 !m-0 !bg-slate-50 !border-slate-200 !fill-slate-600 !shadow-sm !rounded-lg" showInteractive={false} />
+              
               <MiniMap
                 nodeColor={(n) => {
                   const d = n.data as unknown as CustomNodeData;
-                  if (d.walletType === 'Suspect') return '#FF3366';
-                  if (d.walletType === 'Exchange / VASP') return '#00E676';
-                  if (d.walletType === 'Bridge / Protocol') return '#9D4EDD';
-                  return '#00F0FF';
+                  if (d.walletType === 'Suspect') return '#DC2626'; // red-600
+                  if (d.walletType === 'Exchange / VASP') return '#16A34A'; // emerald-600
+                  if (d.walletType === 'Bridge / Protocol') return '#4F46E5'; // indigo-600
+                  if (d.walletType === 'Intermediary / Burner') return '#D97706'; // amber-600
+                  return '#2563EB'; // blue-600
                 }}
-                className="!bg-[#0A0E1A]/90 !border !border-slate-800 rounded-lg hidden sm:block"
-                maskColor="rgba(10, 14, 26, 0.7)"
+                className="!relative !bottom-0 !right-0 !m-0 !bg-slate-50 !border !border-slate-200 rounded-lg hidden sm:block !shadow-sm"
+                maskColor="rgba(248, 250, 252, 0.7)"
               />
-            </ReactFlow>
-
-            {/* Bottom Legend */}
-            <div className="absolute bottom-3 left-3 z-10 hidden sm:flex items-center gap-3 bg-[#0A0E1A]/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-800 text-[10px] font-mono text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#00F0FF]" />
-                Victim
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#FF3366] animate-pulse" />
-                Suspect Aggregator
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#FFB703]" />
-                Mule Relay
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#9D4EDD]" />
-                Bridge
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#00E676]" />
-                Verified VASP
-              </span>
             </div>
+            </ReactFlow>
 
             {/* Node Inspector Drawer */}
             {selectedNodeData && (
@@ -484,8 +473,8 @@ export const ForensicWorkspace: React.FC = () => {
                 nodeData={selectedNodeData}
                 onClose={() => setSelectedNodeData(null)}
                 onAnalyzeWallet={(addr) => {
-                  setAddressInput(addr);
-                  setIsScanning(true);
+                  // This is now read-only or triggers a global event if we pass onAnalyzeWallet up to App.tsx.
+                  // For now, it just views node detail.
                 }}
               />
             )}
@@ -500,25 +489,68 @@ export const ForensicWorkspace: React.FC = () => {
           </div>
         </div>
 
-        {/* ======================================================================= */}
-        {/* RIGHT PANEL (40%): Real-Time Intelligence & Action Module               */}
-        {/* ======================================================================= */}
-        <div className="lg:w-[40%] flex flex-col gap-3 overflow-y-auto pr-1">
-          {/* 1. Identified Destination VASP Card with "Generate Freeze Notice" */}
-          <DestinationVASPCard
-            onGenerateFreezeNotice={() => setIsFreezeModalOpen(true)}
-          />
+        {/* Drag Handle Splitter */}
+        <div 
+          className="w-4 hidden lg:flex items-center justify-center cursor-col-resize group z-10 mx-1"
+          onMouseDown={handleDragStart}
+        >
+          <div className="w-1 h-12 rounded-full bg-slate-300 group-hover:bg-blue-500 transition-colors" />
+        </div>
 
-          {/* 2. Chronological Transit Timeline */}
-          <TransitTimeline
-            onSelectTx={(tx) => {
-              setSelectedNodeData(null);
-              setSelectedTxData(tx);
-            }}
-          />
+        {/* ======================================================================= */}
+        {/* RIGHT PANEL: Real-Time Intelligence & Action Module                     */}
+        {/* ======================================================================= */}
+        <div 
+          className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm shrink-0"
+          style={{ width: `calc(${rightPanelWidth}% - 0.5rem)` }}
+        >
+          
+          {/* Tab Navigation */}
+          <div className="flex border-b border-slate-200 bg-slate-50 shrink-0">
+            <button 
+              onClick={() => setActivePanel('vasp')} 
+              className={`flex-1 py-3 text-[11px] font-bold font-mono transition-all ${activePanel === 'vasp' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'}`}
+            >
+              VASP INTELLIGENCE
+            </button>
+            <button 
+              onClick={() => setActivePanel('timeline')} 
+              className={`flex-1 py-3 text-[11px] font-bold font-mono transition-all ${activePanel === 'timeline' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'}`}
+            >
+              LEDGER AUDIT
+            </button>
+            <button 
+              onClick={() => setActivePanel('ai')} 
+              className={`flex-1 py-3 text-[11px] font-bold font-mono transition-all ${activePanel === 'ai' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'}`}
+            >
+              AI DIRECTIVES
+            </button>
+          </div>
 
-          {/* 3. AI Investigative Summary Card */}
-          <AISummaryCard />
+          <div className="flex-1 overflow-y-auto p-3 custom-scrollbar relative">
+            {activePanel === 'vasp' && (
+              <div className="animate-in fade-in duration-200 h-full">
+                <DestinationVASPCard onGenerateNotice={() => setIsFreezeModalOpen(true)} />
+              </div>
+            )}
+            
+            {activePanel === 'timeline' && (
+              <div className="animate-in fade-in duration-200 h-full flex flex-col">
+                <TransitTimeline
+                  onSelectTx={(tx) => {
+                    setSelectedNodeData(null);
+                    setSelectedTxData(tx);
+                  }}
+                />
+              </div>
+            )}
+
+            {activePanel === 'ai' && (
+              <div className="animate-in fade-in duration-200 h-full">
+                <AISummaryCard />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
