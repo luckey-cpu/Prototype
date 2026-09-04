@@ -86,11 +86,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <span className="text-[10px] font-bold text-slate-500 tracking-wider leading-none">FORENSIC INTELLIGENCE</span>
             </div>
           </div>
-          {/* Govt Badge */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-slate-100/80 backdrop-blur rounded-md border border-slate-200">
-            <Landmark className="w-3.5 h-3.5 text-slate-500" />
-            <span className="text-[11px] font-semibold text-slate-700 tracking-wide">GOVT OF INDIA • MHA / I4C AUTHORIZED</span>
-          </div>
+
         </div>
 
         <nav className="flex items-center gap-4" aria-label="Primary navigation">
