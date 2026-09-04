@@ -56,6 +56,31 @@
   }
 }
 
+/* Base Background setup */
+.bg-cyber-network {
+  background-image: url('./assets/bg-network.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background-color 0.3s ease, filter 0.3s ease;
+}
+
+/* Dark Theme: Overlay with semi-transparent dark tint & screen blend mode */
+.dark .bg-cyber-network {
+  background-color: #0b0f19;
+  background-blend-mode: screen;
+  filter: brightness(0.9) contrast(1.1);
+}
+
+/* Light Theme: High contrast, inverted/lightened effect */
+.light .bg-cyber-network, 
+:root:not(.dark) .bg-cyber-network {
+  background-color: #f8fafc;
+  background-blend-mode: multiply;
+  filter: brightness(1.2) opacity(0.25);
+}
+
 /* Glassmorphism & Cyber Command Center Utility Classes */
 .forensic-surface {
   background: #121829;
