@@ -123,34 +123,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </nav>
       </header>
 
-      {/* Operational Status Banner */}
-      <section className="w-full bg-white/90 backdrop-blur border-b border-slate-200/50 py-3 px-6 shadow-sm z-40 relative" aria-label="Operational Metrics">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true"></div>
-             <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">System Status: Online</span>
-          </div>
-          
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-2 text-sm text-slate-600">
-             <div className="flex items-center gap-2">
-               <Activity className="w-4 h-4 text-slate-400" aria-hidden="true" />
-               <span className="font-medium">Active Cases: <strong className="text-slate-900 font-semibold">{activeCases.toLocaleString()}</strong></span>
-             </div>
-             <div className="flex items-center gap-2">
-               <AlertTriangle className="w-4 h-4 text-slate-400" aria-hidden="true" />
-               <span className="font-medium">Freeze Notices: <strong className="text-slate-900 font-semibold">₹{freezeAmount.toFixed(1)} Cr</strong></span>
-             </div>
-             <div className="flex items-center gap-2">
-               <Network className="w-4 h-4 text-slate-400" aria-hidden="true" />
-               <span className="font-medium">NCRP Sync: <strong className="text-emerald-700 font-semibold">14ms Latency</strong></span>
-             </div>
-             <div className="flex items-center gap-2">
-               <Clock className="w-4 h-4 text-slate-400" aria-hidden="true" />
-               <span className="font-medium">Chains: <strong className="text-slate-900 font-semibold">EVM, BTC, SOL</strong></span>
-             </div>
-          </div>
-        </div>
-      </section>
 
       {/* Hero Section */}
       <main className="flex-1 w-full bg-transparent">
