@@ -81,6 +81,58 @@
   filter: brightness(1.2) opacity(0.25);
 }
 
+/* Base container background styling */
+.hero-bg {
+  background-image: url('./assets/bg-network.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* ----------------
+   DARK THEME FIX
+   ---------------- */
+.dark .hero-bg {
+  /* Adds a subtle gradient overlay to pop text without losing background details */
+  background-image: 
+    radial-gradient(circle at center, rgba(15, 23, 42, 0.45) 0%, rgba(2, 6, 23, 0.85) 100%),
+    url('./assets/bg-network.jpg');
+}
+
+/* Bright text colors for Dark Mode */
+.dark .hero-title {
+  color: #ffffff;
+  text-shadow: 0 0 25px rgba(59, 130, 246, 0.5); /* Glow effect for the title */
+}
+
+.dark .hero-subtitle {
+  color: #94a3b8; /* High-contrast light slate */
+}
+
+/* ----------------
+   LIGHT THEME FIX
+   ---------------- */
+.light .hero-bg,
+:root:not(.dark) .hero-bg {
+  /* Soft light overlay to tone down the dark background for light theme */
+  background-image: 
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.88), rgba(241, 245, 249, 0.92)),
+    url('./assets/bg-network.jpg');
+}
+
+/* Dark text colors for Light Mode */
+.light .hero-title,
+:root:not(.dark) .hero-title {
+  color: #0f172a; /* Deep contrast dark slate */
+  text-shadow: none;
+}
+
+.light .hero-subtitle,
+:root:not(.dark) .hero-subtitle {
+  color: #334155;
+}
+
 /* Glassmorphism & Cyber Command Center Utility Classes */
 .forensic-surface {
   background: #121829;

@@ -154,32 +154,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
       {/* Hero Section */}
       <main className="flex-1 w-full bg-transparent">
-        <section className="max-w-7xl mx-auto px-6 pt-20 pb-24 flex flex-col items-center text-center">
+        <section className="hero-bg py-20 px-6 text-center min-h-[500px] flex flex-col justify-center items-center">
           
-          {/* Subtle Classification Tag */}
-          <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-widest">
-              <li>Digital Evidence Generator</li>
-              <li aria-hidden="true" className="text-slate-300">•</li>
-              <li>Sec 63 BSA</li>
-              <li aria-hidden="true" className="text-slate-300">•</li>
-              <li>Sec 65B IEA</li>
-            </ol>
-          </nav>
+          {/* Sub-header Badge */}
+          <p className="text-xs tracking-widest font-mono text-blue-600 dark:text-blue-400 uppercase mb-4">
+            DIGITAL EVIDENCE GENERATOR • SEC 63 BSA • SEC 65B IEA
+          </p>
 
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-slate-900 leading-[1.2] max-w-4xl">
+          {/* Main Headline */}
+          <h1 className="hero-title text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight max-w-4xl mb-6 leading-[1.2]">
             Advanced Cryptocurrency <br className="hidden sm:block" />
-            <span className="text-blue-900">Forensic Intelligence.</span>
+            <span className="text-blue-500">Forensic Intelligence.</span>
           </h1>
 
-          <p className="mt-6 text-[15px] sm:text-base text-slate-600 max-w-2xl font-normal leading-relaxed">
+          {/* Description Text */}
+          <p className="hero-subtitle text-[15px] sm:text-lg max-w-2xl mb-10 font-medium leading-relaxed">
             Empowering Indian Law Enforcement Agencies with real-time fund-flow mapping, cross-chain bridge de-anonymization, and automated statutory notice generation.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-4">
             <button
               onClick={onLaunchConsole}
-              className="w-full sm:w-auto px-6 py-3 rounded text-sm font-bold bg-blue-900 hover:bg-blue-950 text-white shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 outline-none flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 outline-none flex items-center justify-center gap-2"
             >
               <Shield className="w-4 h-4" />
               <span>Launch Forensic Console</span>
@@ -187,12 +184,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
             <button
               onClick={onLoadSample}
-              className="w-full sm:w-auto px-6 py-3 rounded text-sm font-semibold bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 outline-none flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 rounded-lg text-sm font-semibold bg-white/10 dark:bg-slate-800/80 text-slate-800 dark:text-slate-100 border border-slate-600 hover:bg-white/20 transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 outline-none flex items-center justify-center gap-2"
             >
-              <Search className="w-4 h-4 text-slate-500" />
+              <Search className="w-4 h-4" />
               <span>View Live Investigation</span>
             </button>
           </div>
+        </section>
+
+        <section className="max-w-7xl mx-auto px-6 pb-24">
 
           {/* Structured Feature Grid (CSS Grid) */}
           <div className="mt-24 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
