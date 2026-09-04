@@ -203,6 +203,10 @@
   animation: pulse-glow 2.5s ease-in-out infinite;
 }
 
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
 /* React Flow Cyberpunk Grid and Nodes */
 .react-flow__renderer {
   background-color: #F8FAFC !important;

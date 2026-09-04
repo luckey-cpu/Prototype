@@ -1,82 +1,223 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShieldCheck, ArrowRight, Server } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldAlert, Server, Fingerprint, Lock, Cpu, Key, ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const [step, setStep] = useState<1 | 2>(1);
   const [credentials, setCredentials] = useState({ officerId: '', ssoToken: '' });
+  const [showToken, setShowToken] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [mfaStatus, setMfaStatus] = useState<'idle' | 'awaiting' | 'success'>('idle');
+  const [latency, setLatency] = useState(12);
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Simulate live telemetry ping
+  useEffect(() => {
+    const interval = setInterval(() => setLatency(Math.floor(Math.random() * 8) + 8), 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate authentication check
-    if (credentials.officerId) {
-      navigate('/dashboard');
+    if (credentials.officerId && credentials.ssoToken) {
+      setIsAuthenticating(true);
+      setTimeout(() => {
+        setIsAuthenticating(false);
+        setStep(2);
+        setMfaStatus('awaiting');
+      }, 1500);
     }
   };
 
+  const handleMfaAuth = () => {
+    if (mfaStatus !== 'awaiting') return;
+    setMfaStatus('success');
+    setTimeout(() => navigate('/dashboard'), 1500);
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 relative overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950">
+    <div className="min-h-screen bg-[#030712] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden font-sans">
       
-      {/* Background Decorative Mesh Glow */}
-      <div className="absolute inset-0 bg-cyber-network opacity-20 pointer-events-none" />
+      {/* Dynamic Visual Depth: Mesh, Grid & Scanlines */}
+      <div className="absolute inset-0 bg-cyber-network opacity-10 pointer-events-none mix-blend-screen" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(37,99,235,0.08)_0%,rgba(3,7,18,1)_100%)] pointer-events-none" />
+      <div className="scanlines absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(to bottom, transparent 50%, #000 50%)', backgroundSize: '100% 4px' }} />
 
-      <div className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl p-8 backdrop-blur-xl shadow-2xl relative z-10">
+      <main className="w-full max-w-md relative z-10">
         
-        {/* Header Badge */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-600/10 border border-blue-500/30 rounded-xl mb-4 text-blue-400">
-            <ShieldCheck className="w-6 h-6" />
+        {/* Auth Card Architecture */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative rounded-xl overflow-hidden bg-slate-900/40 backdrop-blur-2xl border border-blue-500/20 shadow-[0_0_40px_-10px_rgba(37,99,235,0.3)]"
+        >
+          {/* Corner HUD Brackets */}
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-blue-500/50 rounded-tl-xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-blue-500/50 rounded-tr-xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-blue-500/50 rounded-bl-xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-blue-500/50 rounded-br-xl pointer-events-none" />
+
+          {/* Top Status Header */}
+          <div className="bg-blue-950/40 border-b border-blue-500/20 px-4 py-2 flex items-center justify-between text-[10px] font-mono tracking-widest text-blue-400">
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+              SYSTEM.AUTH
+            </span>
+            <span>[SEC_LEVEL: TOP_SECRET_L4]</span>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">National SSO Portal</h2>
-          <p className="text-xs text-slate-400 mt-1 font-mono">AUTHORIZED PERSONNEL ONLY • I4C ENCRYPTED</p>
+
+          <div className="p-8 pb-10">
+            {/* Glowing Icon Header */}
+            <div className="flex flex-col items-center text-center mb-8">
+              <motion.div 
+                className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-900 border border-blue-500/30 mb-5 shadow-[0_0_20px_rgba(37,99,235,0.2)]"
+                animate={{ boxShadow: ['0 0 20px rgba(37,99,235,0.2)', '0 0 40px rgba(37,99,235,0.4)', '0 0 20px rgba(37,99,235,0.2)'] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-md" />
+                <ShieldAlert className="w-8 h-8 text-blue-400 relative z-10" />
+              </motion.div>
+              <h1 className="text-2xl font-bold tracking-tight text-white font-sans uppercase">BLUE LOCK</h1>
+              <p className="text-xs text-blue-400/80 mt-1.5 font-mono tracking-widest uppercase">Forensic Intelligence Node</p>
+            </div>
+
+            <AnimatePresence mode="wait">
+              {step === 1 ? (
+                <motion.form 
+                  key="step1"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3 }}
+                  onSubmit={handleStep1Submit} 
+                  className="space-y-5"
+                >
+                  <div className="space-y-1.5">
+                    <label className="flex text-[10px] font-mono text-slate-400 tracking-wider uppercase ml-1">
+                      <Cpu className="w-3 h-3 mr-1.5" /> Govt Officer ID
+                    </label>
+                    <div className="relative group">
+                      <input
+                        type="text"
+                        required
+                        value={credentials.officerId}
+                        onChange={(e) => setCredentials({ ...credentials, officerId: e.target.value })}
+                        placeholder="OFFICER-8842-MHA"
+                        className="w-full bg-[#030712]/80 border border-slate-700/60 rounded-lg px-4 py-3.5 text-sm font-mono text-blue-50 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:shadow-[inset_0_0_15px_rgba(37,99,235,0.15)] transition-all"
+                      />
+                      {credentials.officerId && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="flex text-[10px] font-mono text-slate-400 tracking-wider uppercase ml-1">
+                      <Key className="w-3 h-3 mr-1.5" /> Access Token
+                    </label>
+                    <div className="relative group">
+                      <input
+                        type={showToken ? 'text' : 'password'}
+                        required
+                        value={credentials.ssoToken}
+                        onChange={(e) => setCredentials({ ...credentials, ssoToken: e.target.value })}
+                        placeholder="••••••••••••••••"
+                        className="w-full bg-[#030712]/80 border border-slate-700/60 rounded-lg px-4 py-3.5 pr-10 text-sm font-mono tracking-widest text-blue-50 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:shadow-[inset_0_0_15px_rgba(37,99,235,0.15)] transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowToken(!showToken)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-blue-400 transition-colors focus:outline-none"
+                      >
+                        {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <motion.button
+                    type="submit"
+                    disabled={isAuthenticating || !credentials.officerId || !credentials.ssoToken}
+                    whileHover={{ scale: 1.01, boxShadow: '0 0 30px rgba(37,99,235,0.4)' }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full relative overflow-hidden bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-all mt-2 disabled:opacity-70 disabled:cursor-not-allowed border border-blue-400/30"
+                  >
+                    {isAuthenticating ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span className="tracking-wider text-sm">AUTHENTICATING...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="tracking-wider text-sm">INITIALIZE UPLINK</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                    {/* Shimmer effect */}
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent hover:animate-[shimmer_1.5s_infinite]" />
+                  </motion.button>
+                </motion.form>
+              ) : (
+                <motion.div 
+                  key="step2"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col items-center justify-center py-6"
+                >
+                  <div className="relative mb-6">
+                    <motion.button
+                      onClick={handleMfaAuth}
+                      disabled={mfaStatus === 'success'}
+                      animate={mfaStatus === 'awaiting' ? { 
+                        boxShadow: ['0 0 0 0 rgba(6,182,212,0.7)', '0 0 0 20px rgba(6,182,212,0)'],
+                      } : {}}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className={`w-24 h-24 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
+                        mfaStatus === 'success' 
+                          ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400' 
+                          : 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 cursor-pointer'
+                      }`}
+                    >
+                      {mfaStatus === 'success' ? (
+                        <Lock className="w-10 h-10" />
+                      ) : (
+                        <Fingerprint className="w-10 h-10" />
+                      )}
+                    </motion.button>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    {mfaStatus === 'success' ? 'ACCESS GRANTED' : 'AWAITING HARDWARE KEY'}
+                  </h3>
+                  <p className="text-xs text-slate-400 text-center font-mono max-w-[250px] leading-relaxed">
+                    {mfaStatus === 'success' 
+                      ? 'Cryptographic handshake verified. Establishing secure connection...' 
+                      : 'Tap your registered YubiKey or biometric sensor to complete cryptographic handshake.'}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+
+        {/* Live Telemetry Bar */}
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-[10px] font-mono text-slate-500 tracking-wider">
+          <div className="flex items-center gap-2">
+            <Server className="w-3.5 h-3.5 text-blue-500/70" />
+            <span className="text-slate-400">NODE:</span> NDLS-NODE-04
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5"><Lock className="w-3 h-3 text-emerald-500/70" /> AES-256-GCM / TLS 1.3</span>
+            <span className="flex items-center gap-1.5 border-l border-slate-800 pl-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> 
+              {latency}ms
+            </span>
+          </div>
         </div>
 
-        {/* Login Form */}
-        <form onSubmit={handleLogin} className="space-y-5">
-          <div>
-            <label className="block text-xs font-mono text-slate-300 uppercase mb-2">Govt Officer ID / Email</label>
-            <div className="relative">
-              <input
-                type="text"
-                required
-                placeholder="OFFICER-8842-MHA"
-                value={credentials.officerId}
-                onChange={(e) => setCredentials({ ...credentials, officerId: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-mono text-slate-300 uppercase mb-2">SSO Passcode / Security Key</label>
-            <div className="relative">
-              <input
-                type="password"
-                required
-                placeholder="••••••••••••"
-                value={credentials.ssoToken}
-                onChange={(e) => setCredentials({ ...credentials, ssoToken: e.target.value })}
-                className="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 transition duration-200 cursor-pointer"
-          >
-            <span>Authenticate & Access Console</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </form>
-
-        {/* Footer info */}
-        <div className="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-500 font-mono">
-          <span className="flex items-center gap-1"><Server className="w-3 h-3 text-emerald-500" /> SECURE GATEWAY</span>
-          <span>LATENCY: 12ms</span>
-        </div>
-
-      </div>
+      </main>
     </div>
   );
 };
