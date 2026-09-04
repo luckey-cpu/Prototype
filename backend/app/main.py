@@ -9,10 +9,6 @@ from app.api.reports import router as reports_router
 from app.api.ai import router as ai_router
 from app.api.system import router as system_router
 from app.api.antigravity import router as antigravity_router
-from app.api.routes import trace
-from app.api.routes import classify
-from app.api.routes import attribution
-from app.api.routes import audit
 
 app = FastAPI(
     title="BLUCE LOCK — Real-Time Crypto Fraud Attribution & VASP Intelligence Platform",
@@ -29,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
+# Core SIH Routers
 app.include_router(wallets_router)
 app.include_router(cases_router)
 app.include_router(alerts_router)
@@ -37,25 +33,52 @@ app.include_router(reports_router)
 app.include_router(ai_router)
 app.include_router(system_router)
 app.include_router(antigravity_router)
-app.include_router(trace.router, prefix="/api/v1/trace", tags=["Trace"])
-app.include_router(classify.router, prefix="/api/v1/classify-wallet", tags=["ML Classification"])
-app.include_router(attribution.router, prefix="/api/v1/attribution", tags=["Fraud Attribution"])
-app.include_router(audit.router, prefix="/api/v1/audit-trail", tags=["Audit & Security"])
+
+# Optional / Advanced ML & DB Routes (loaded if dependencies present)
+try:
+    from app.api.routes import trace
+    app.include_router(trace.router, prefix="/api/v1/trace", tags=["Trace"])
+except Exception:
+    pass
+
+try:
+    from app.api.routes import classify
+    app.include_router(classify.router, prefix="/api/v1/classify-wallet", tags=["ML Classification"])
+except Exception:
+    pass
+
+try:
+    from app.api.routes import attribution
+    app.include_router(attribution.router, prefix="/api/v1/attribution", tags=["Fraud Attribution"])
+except Exception:
+    pass
+
+try:
+    from app.api.routes import audit
+    app.include_router(audit.router, prefix="/api/v1/audit-trail", tags=["Audit & Security"])
+except Exception:
+    pass
 
 @app.on_event("startup")
 async def startup_event():
-    from app.db.session import engine
-    from app.db.postgres_models import Base
     import structlog
     logger = structlog.get_logger()
-    logger.info("Application starting up... Initializing DB...")
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Postgres tables created (if not exist)")
+    logger.info("Application starting up...")
+    try:
+        from app.db.session import engine
+        from app.db.postgres_models import Base
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Postgres tables verified")
+    except Exception as e:
+        logger.info(f"Using in-memory / JSON file stores (PostgreSQL not connected: {e})")
     
-    # Load PyTorch and XGBoost Models into Memory
-    from app.ml.inference import get_engine
-    get_engine()
+    try:
+        from app.ml.inference import get_engine
+        get_engine()
+        logger.info("PyTorch / XGBoost ML models loaded")
+    except Exception as e:
+        logger.info(f"Using rule-based risk and heuristic attribution engine: {e}")
 
 @app.get("/")
 def root():

@@ -1,0 +1,10 @@
+{
+  "name": "bluce-lock-prototype-root",
+  "version": "2.4.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "dev": "npm --prefix frontend run dev",
+    "preview": "npm --prefix frontend run preview"
+  }
+}
