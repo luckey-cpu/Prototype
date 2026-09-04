@@ -283,7 +283,7 @@ export const SettingsPage: React.FC = () => {
               Statutory Legal Disclaimer & Evidence Protocols
             </h3>
             <p className="text-sm text-slate-400 leading-relaxed mb-2">
-              BLUE LOCK is an investigative intelligence prototype designed exclusively for authorized law enforcement and cybercrime forensics personnel. Attribution results and risk ratings are probabilistic and require statutory verification by authorized officers through appropriate legal processes under Sections 91 and 102 CrPC / Bharatiya Nagarik Suraksha Sanhita.
+              TxSentinel is an investigative intelligence prototype designed exclusively for authorized law enforcement and cybercrime forensics personnel. Attribution results and risk ratings are probabilistic and require statutory verification by authorized officers through appropriate legal processes under Sections 91 and 102 CrPC / Bharatiya Nagarik Suraksha Sanhita.
             </p>
             <p className="text-xs text-slate-500 leading-relaxed">
               This platform complies with ethical AI and forensic security principles. It provides no mechanisms for transaction mixing, trace obfuscation, or regulatory circumvention.

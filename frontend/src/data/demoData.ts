@@ -10,7 +10,7 @@ import {
 export const DEMO_SUSPECT_ADDRESS = '0x7A2F8C91F0328b9c24090954e3d389a91f';
 export const DEMO_NCRP_SAHYOG_ID = 'NCRP/SAHYOG: CC-MAH-2026-88912';
 
-export const LE_INTEL_ATTRIBUTION_REPORT = `🛡️ BLUCE LOCK LE-INTEL AI | CYBER-FORENSIC ATTRIBUTION REPORT
+export const LE_INTEL_ATTRIBUTION_REPORT = `🛡️ TxSentinel LE-INTEL AI | CYBER-FORENSIC ATTRIBUTION REPORT
 Operational Authority: Indian Cyber Crime Coordination Centre (I4C) & State Cyber Police Units
 Investigation Framework: National Cybercrime Reporting Portal (NCRP) & SAHYOG Platform Protocol
 Legal Mandate: Section 91 & Section 102 Cr.P.C., 1973 / Section 94 & Section 106 BNSS, 2023 r/w Section 66-D IT Act, 2000
@@ -895,7 +895,7 @@ SUBJECT: URGENT STATUTORY REQUISITION FOR IMMEDIATE FREEZING OF CRYPTO ASSETS, K
 
 1. WHEREAS, an active cybercrime criminal investigation is being conducted by this unit regarding an organized cryptocurrency investment scam where victim funds amounting to INR 8,42,500/- were fraudulently induced and misappropriated.
 
-2. AND WHEREAS, real-time forensic blockchain fund tracing conducted via the BLUCE LOCK forensic intelligence platform has established that proceeds of crime flowed from the suspect aggregator wallet (0x7A2F8C91F0328b9c24090954e3d389a91f) through layering mule addresses and the Stargate cross-chain bridge, ultimately terminating and consolidating into the following destination deposit address on the Polygon Network:
+2. AND WHEREAS, real-time forensic blockchain fund tracing conducted via the TxSentinel forensic intelligence platform has established that proceeds of crime flowed from the suspect aggregator wallet (0x7A2F8C91F0328b9c24090954e3d389a91f) through layering mule addresses and the Stargate cross-chain bridge, ultimately terminating and consolidating into the following destination deposit address on the Polygon Network:
    Target Deposit Address: 0x28C6c06298d514Db089934071355E5743bf21d60
    Associated Omnibus Cluster: VASP_BINANCE_HOT14 (Confidence: 91%)
    Last Known Inflow: 71,200.00 USDC (Tx: 0x4eb832879c6019242d8091823903648192830192830192830192830192830191)

@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, Search, Lock, Globe } from 'lucide-react';
-
-import logoUrl from '../../assets/logo.jpg';
+import { TxSentinelLogo } from '../common/TxSentinelLogo';
 
 interface HeaderProps {
   onLoadSample: () => void;
@@ -14,28 +13,9 @@ export const Header: React.FC<HeaderProps> = ({ onLoadSample }) => {
   return (
     <header className="w-full bg-white/95 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-6 py-3.5 flex items-center justify-between shadow-sm sticky top-0 z-50 transition-colors duration-300">
       <div className="flex items-center gap-6">
-        {/* Brand Section with New Logo */}
+        {/* Brand Section with TxSentinel Logo */}
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
-          {/* Custom Logo Image Container with dynamic glow */}
-          <div className="relative flex items-center justify-center p-1 rounded-lg bg-blue-600/10 border border-blue-500/20 shadow-sm hover:border-blue-500/50 transition duration-300">
-            <img 
-              src={logoUrl}
-              alt="BLUE LOCK Logo" 
-              className="w-8 h-8 object-contain transition-transform duration-300 group-hover:scale-105 mix-blend-multiply dark:mix-blend-normal"
-            />
-            {/* Subtle Cyber Glow effect under logo */}
-            <div className="absolute inset-0 bg-blue-500/20 blur-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-          </div>
-
-          {/* Brand Text */}
-          <div className="flex flex-col">
-            <span className="text-lg font-black tracking-wider text-slate-900 dark:text-white font-mono flex items-center gap-1.5">
-              BLUE LOCK
-            </span>
-            <span className="text-[10px] font-semibold tracking-widest text-blue-400 uppercase -mt-1">
-              Forensic Intelligence
-            </span>
-          </div>
+          <TxSentinelLogo size={36} showText={true} textSize="md" />
         </div>
       </div>
 

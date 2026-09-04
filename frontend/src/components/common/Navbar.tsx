@@ -8,6 +8,7 @@ import {
   X,
   Command
 } from 'lucide-react';
+import { TxSentinelLogo } from './TxSentinelLogo';
 
 interface NavbarProps {
   onLoadSample: () => void;
@@ -72,20 +73,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          <button onClick={onNavigateHome} className="flex items-center gap-3 group" aria-label="Return to dashboard home">
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-blue-500/30 bg-blue-500/10 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.15)]">
-              <ShieldAlert className="h-4 w-4" />
-              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-black tracking-tighter text-white text-[17px] font-sans leading-none">
-                BLUE<span className="text-blue-400">LOCK</span>
-              </span>
-              <span className="text-[9px] font-semibold tracking-widest text-slate-500 leading-none mt-0.5 flex items-center gap-1">
-                <Lock className="h-2.5 w-2.5 text-emerald-500" />
+          <button onClick={onNavigateHome} className="flex items-center gap-2.5 group" aria-label="Return to dashboard home">
+            <TxSentinelLogo size={32} showText={true} textSize="sm" />
+            <div className="hidden sm:flex items-center pl-2 border-l border-slate-700/60">
+              <span className="text-[9px] font-semibold tracking-widest text-slate-400 leading-none flex items-center gap-1">
+                <Lock className="h-2.5 w-2.5 text-emerald-400" />
                 Sec. 65B CrPC
               </span>
             </div>

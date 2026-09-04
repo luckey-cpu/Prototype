@@ -7,7 +7,7 @@ export const AISummaryCard: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const handleCopySummary = () => {
-    const text = `BLUCE AI FORENSIC SUMMARY:\n\nOBSERVED FACTS:\n${DEMO_AI_FINDINGS.observed_facts.join('\n')}\n\nINFERRED PATTERNS:\n${DEMO_AI_FINDINGS.inferred_patterns.join('\n')}\n\nRECOMMENDATIONS:\n${DEMO_AI_FINDINGS.recommendations.join('\n')}`;
+    const text = `TxSentinel AI FORENSIC SUMMARY:\n\nOBSERVED FACTS:\n${DEMO_AI_FINDINGS.observed_facts.join('\n')}\n\nINFERRED PATTERNS:\n${DEMO_AI_FINDINGS.inferred_patterns.join('\n')}\n\nRECOMMENDATIONS:\n${DEMO_AI_FINDINGS.recommendations.join('\n')}`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1600);

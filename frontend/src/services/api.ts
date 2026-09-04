@@ -51,7 +51,7 @@ export const api = {
   // System
   async getSystemStatus() {
     return fetchWithFallback('/api/system/status', {}, {
-      platform: 'BLUCE LOCK',
+      platform: 'TxSentinel',
       version: '2.4.0-SIH-PROTOTYPE',
       system_status: 'ONLINE',
       blockchain_nodes: {
@@ -166,7 +166,7 @@ export const api = {
           case_id: caseId,
           investigator_name: investigatorName || 'Insp. V. K. Deshmukh',
           investigator_badge: 'CY-7819',
-          notes: 'Generated via BLUCE LOCK Forensics Console'
+          notes: 'Generated via TxSentinel Forensics Console'
         })
       });
       if (response.ok) {

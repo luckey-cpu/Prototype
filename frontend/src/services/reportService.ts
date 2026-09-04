@@ -7,7 +7,7 @@ export class ReportService {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `BLUCE_LOCK_REPORT_${caseId}.pdf`;
+      a.download = `TxSentinel_REPORT_${caseId}.pdf`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

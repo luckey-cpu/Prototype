@@ -1,6 +1,6 @@
-# BLUCE LOCK - Launcher Script for SIH Presentation
+# TxSentinel - Launcher Script for SIH Presentation
 Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host "BLUCE LOCK - National Cybercrime Forensics Intelligence" -ForegroundColor White
+Write-Host "TxSentinel - National Cybercrime Forensics Intelligence" -ForegroundColor White
 Write-Host "Real-Time Crypto Fraud Attribution & VASP Platform" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 

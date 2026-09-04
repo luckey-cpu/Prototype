@@ -11,7 +11,7 @@ from app.api.system import router as system_router
 from app.api.antigravity import router as antigravity_router
 
 app = FastAPI(
-    title="BLUCE LOCK — Real-Time Crypto Fraud Attribution & VASP Intelligence Platform",
+    title="TxSentinel — Real-Time Crypto Fraud Attribution & VASP Intelligence Platform",
     description="Law-Enforcement-Oriented Cryptocurrency Forensics & Intelligence Engine (SIH Competition Prototype)",
     version="2.4.0"
 )
@@ -83,7 +83,7 @@ async def startup_event():
 @app.get("/")
 def root():
     return {
-        "platform": "BLUCE LOCK",
+        "platform": "TxSentinel",
         "description": "National Cybercrime Blockchain Intelligence & VASP Attribution Engine",
         "status": "OPERATIONAL",
         "docs_url": "/docs",

@@ -56,7 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'transaction-graph' as PageId, label: 'Full Screen Graph', icon: GitFork },
     { id: 'vasp-intelligence' as PageId, label: 'VASP Intelligence', icon: Building2 },
     { id: 'cross-chain' as PageId, label: 'Cross-Chain Bridge', icon: Layers },
-    { id: 'ai-assistant' as PageId, label: 'BLUE LOCK AI Assistant', icon: Bot },
+    { id: 'ai-assistant' as PageId, label: 'TxSentinel AI Assistant', icon: Bot },
     { id: 'alerts' as PageId, label: 'Alerts Center', icon: AlertTriangle, badge: unreadAlertCount },
     { id: 'cases' as PageId, label: 'NCRP Case Registry', icon: FolderLock },
     { id: 'reports' as PageId, label: 'Forensic Reports', icon: FileText },

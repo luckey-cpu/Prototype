@@ -80,7 +80,7 @@ export const InvestigationReportPreview: React.FC<InvestigationReportPreviewProp
 
   const handleExportJSON = () => {
     const exportPayload = {
-      platform: 'BLUCE LOCK',
+      platform: 'TxSentinel',
       version: '2.4.0',
       generated_at: new Date().toISOString(),
       report_classification: 'CONFIDENTIAL // LAW ENFORCEMENT SENSITIVE',
@@ -102,7 +102,7 @@ export const InvestigationReportPreview: React.FC<InvestigationReportPreviewProp
         statutory_compliance: 'Section 65B Indian Evidence Act / Section 63 Bharatiya Sakshya Adhiniyam'
       }
     };
-    reportService.exportJSON(exportPayload, `BLUCE_LOCK_INTELLIGENCE_${activeCase.case_id}`);
+    reportService.exportJSON(exportPayload, `TxSentinel_INTELLIGENCE_${activeCase.case_id}`);
   };
 
   return (
@@ -165,7 +165,7 @@ export const InvestigationReportPreview: React.FC<InvestigationReportPreviewProp
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-[#00E676]" />
               <h3 className="font-mono text-sm font-bold text-white uppercase tracking-wider">
-                BLUCE LOCK LE-INTEL AI | CYBER-FORENSIC ATTRIBUTION REPORT
+                TxSentinel LE-INTEL AI | CYBER-FORENSIC ATTRIBUTION REPORT
               </h3>
             </div>
 
@@ -188,7 +188,7 @@ export const InvestigationReportPreview: React.FC<InvestigationReportPreviewProp
                   const url = URL.createObjectURL(blob);
                   const link = document.createElement('a');
                   link.href = url;
-                  link.download = `BLUCE-LE-INTEL-REPORT-${activeCase.case_id}.txt`;
+                  link.download = `TxSentinel-LE-INTEL-REPORT-${activeCase.case_id}.txt`;
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);

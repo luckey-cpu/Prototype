@@ -1,0 +1,31 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="txGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#38BDF8" />
+      <stop offset="50%" stopColor="#2563EB" />
+      <stop offset="100%" stopColor="#1D4ED8" />
+    </linearGradient>
+  </defs>
+  <polygon
+    points="50,6 88,24 88,68 50,94 12,68 12,24"
+    fill="url(#txGradient)"
+    fillOpacity="0.2"
+    stroke="url(#txGradient)"
+    strokeWidth="5"
+    strokeLinejoin="round"
+  />
+  <circle cx="50" cy="50" r="14" fill="#0F172A" stroke="#38BDF8" strokeWidth="4" />
+  <circle cx="50" cy="50" r="6" fill="#38BDF8" />
+  <line x1="50" y1="20" x2="50" y2="36" stroke="#38BDF8" strokeWidth="4" strokeLinecap="round" />
+  <line x1="50" y1="64" x2="50" y2="80" stroke="#38BDF8" strokeWidth="4" strokeLinecap="round" />
+  <line x1="24" y1="36" x2="38" y2="44" stroke="#60A5FA" strokeWidth="4" strokeLinecap="round" />
+  <line x1="76" y1="36" x2="62" y2="44" stroke="#60A5FA" strokeWidth="4" strokeLinecap="round" />
+  <line x1="24" y1="64" x2="38" y2="56" stroke="#60A5FA" strokeWidth="4" strokeLinecap="round" />
+  <line x1="76" y1="64" x2="62" y2="56" stroke="#60A5FA" strokeWidth="4" strokeLinecap="round" />
+  <circle cx="50" cy="18" r="4" fill="#38BDF8" />
+  <circle cx="50" cy="82" r="4" fill="#38BDF8" />
+  <circle cx="22" cy="34" r="3.5" fill="#60A5FA" />
+  <circle cx="78" cy="34" r="3.5" fill="#60A5FA" />
+  <circle cx="22" cy="66" r="3.5" fill="#60A5FA" />
+  <circle cx="78" cy="66" r="3.5" fill="#60A5FA" />
+</svg>

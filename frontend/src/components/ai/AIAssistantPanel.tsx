@@ -88,7 +88,7 @@ export const AIAssistantPanel: React.FC<AIAssistantPanelProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="font-mono text-base font-bold text-white tracking-wide">
-                BLUCE AI &mdash; Investigation Assistant
+                TxSentinel AI &mdash; Investigation Assistant
               </h2>
               <span className="cyber-badge bg-cyan-950 text-cyan-300 border-cyan-700/60 text-[10px]">
                 FORENSICS ENGINE v2.4
@@ -265,7 +265,7 @@ export const AIAssistantPanel: React.FC<AIAssistantPanelProps> = ({
                 type="text"
                 value={customQuery}
                 onChange={(e) => setCustomQuery(e.target.value)}
-                placeholder="Ask BLUCE AI (e.g. 'Explain Wallet C layering pattern', 'Draft freeze order')..."
+                placeholder="Ask TxSentinel AI (e.g. 'Explain Wallet C layering pattern', 'Draft freeze order')..."
                 className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
               />
               <button

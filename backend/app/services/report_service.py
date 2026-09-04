@@ -41,7 +41,7 @@ class NumberedCanvas(canvas.Canvas):
         
         # Header (pages > 1)
         if self._pageNumber > 1:
-            self.drawString(54, 750, "BLUCE LOCK — CONFIDENTIAL LAW ENFORCEMENT INTELLIGENCE REPORT")
+            self.drawString(54, 750, "TxSentinel — CONFIDENTIAL LAW ENFORCEMENT INTELLIGENCE REPORT")
             self.drawRightString(612 - 54, 750, "RESTRICTED / OFFICIAL USE ONLY")
             self.setStrokeColor(colors.HexColor("#CBD5E1"))
             self.setLineWidth(0.5)
@@ -49,7 +49,7 @@ class NumberedCanvas(canvas.Canvas):
             
         # Footer
         page_str = f"Page {self._pageNumber} of {page_count}"
-        self.drawString(54, 36, "PRODUCED BY BLUCE LOCK CYBERCRIME FORENSICS PLATFORM | SECTION 65B EVIDENCE DRAFT")
+        self.drawString(54, 36, "PRODUCED BY TxSentinel CYBERCRIME FORENSICS PLATFORM | SECTION 65B EVIDENCE DRAFT")
         self.drawRightString(612 - 54, 36, page_str)
         self.setStrokeColor(colors.HexColor("#CBD5E1"))
         self.setLineWidth(0.5)

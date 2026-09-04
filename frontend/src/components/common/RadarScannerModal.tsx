@@ -26,7 +26,7 @@ export const RadarScannerModal: React.FC<RadarScannerModalProps> = ({
     { id: 2, label: 'Building transaction graph & detecting peel chains...', duration: 500 },
     { id: 3, label: 'Evaluating velocity & explainable risk indicators...', duration: 450 },
     { id: 4, label: 'Matching VASP deposit clusters & exchange sweep heuristics...', duration: 550 },
-    { id: 5, label: 'Synthesizing BLUCE AI investigative intelligence...', duration: 400 },
+    { id: 5, label: 'Synthesizing TxSentinel AI investigative intelligence...', duration: 400 },
   ];
 
   useEffect(() => {
@@ -131,7 +131,7 @@ export const RadarScannerModal: React.FC<RadarScannerModalProps> = ({
         </div>
 
         <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-800">
-          <span>Engine: BLUCE-v2.4 Core</span>
+          <span>Engine: TxSentinel-v2.4 Core</span>
           <span className="text-cyan-400 font-semibold">{progress}% COMPLETE</span>
         </div>
       </div>

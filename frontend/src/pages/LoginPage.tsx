@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, Server, Fingerprint, Lock, Cpu, Key, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { TxSentinelLogo } from '../components/common/TxSentinelLogo';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -72,16 +73,7 @@ export const LoginPage: React.FC = () => {
           <div className="p-8 pb-10">
             {/* Glowing Icon Header */}
             <div className="flex flex-col items-center text-center mb-8">
-              <motion.div 
-                className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-900 border border-blue-500/30 mb-5 shadow-[0_0_20px_rgba(37,99,235,0.2)]"
-                animate={{ boxShadow: ['0 0 20px rgba(37,99,235,0.2)', '0 0 40px rgba(37,99,235,0.4)', '0 0 20px rgba(37,99,235,0.2)'] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              >
-                <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-md" />
-                <ShieldAlert className="w-8 h-8 text-blue-400 relative z-10" />
-              </motion.div>
-              <h1 className="text-2xl font-bold tracking-tight text-white font-sans uppercase">BLUE LOCK</h1>
-              <p className="text-xs text-blue-400/80 mt-1.5 font-mono tracking-widest uppercase">Forensic Intelligence Node</p>
+              <TxSentinelLogo size={56} showText={true} textSize="lg" className="flex-col !gap-3" />
             </div>
 
             <AnimatePresence mode="wait">

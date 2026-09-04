@@ -1,4 +1,4 @@
-# BLUCE LOCK - Frontend Subfolder Netlify Configuration
+# TxSentinel - Frontend Subfolder Netlify Configuration
 [build]
   publish = "dist"
   command = "npm run build"

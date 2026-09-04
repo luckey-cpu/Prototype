@@ -54,7 +54,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `BLUCE-LOCK-ATTRIBUTION-REPORT-${currentCase.case_id}.txt`;
+    link.download = `TxSentinel-ATTRIBUTION-REPORT-${currentCase.case_id}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -69,7 +69,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `BLUCE-LOCK-LE-REPORT-${currentCase.case_id}.pdf`;
+        link.download = `TxSentinel-LE-REPORT-${currentCase.case_id}.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -86,7 +86,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
 
   const handleExportJSON = () => {
     const reportData = {
-      platform: 'BLUCE LOCK Cybercrime Intelligence',
+      platform: 'TxSentinel Cybercrime Intelligence',
       case_metadata: currentCase,
       sahyog_tag: DEMO_NCRP_SAHYOG_ID,
       attribution_report: LE_INTEL_ATTRIBUTION_REPORT,
@@ -97,7 +97,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `BLUCE-FORENSICS-${currentCase.case_id}.json`;
+    link.download = `TxSentinel-FORENSICS-${currentCase.case_id}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -116,7 +116,7 @@ export const ReportModal: React.FC<ReportModalProps> = ({
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="font-mono text-sm sm:text-base font-bold text-white tracking-wide">
-                  BLUCE LOCK LE-INTEL AI | CYBER-FORENSIC ATTRIBUTION REPORT
+                  TxSentinel LE-INTEL AI | CYBER-FORENSIC ATTRIBUTION REPORT
                 </h3>
                 <span className="cyber-badge bg-cyan-950 text-[#00F0FF] border-[#00F0FF]/40 text-[10px]">
                   SEC 91 &bull; 102 CrPC / BNSS 94 &bull; 106

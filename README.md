@@ -1,4 +1,4 @@
-# 🛡️ BLUCE LOCK | High-Density Law Enforcement Workstation
+# 🛡️ TxSentinel | High-Density Law Enforcement Workstation
 
 <div align="center">
   <h3>Real-Time Crypto Fraud Attribution & VASP Intelligence Platform</h3>
@@ -13,7 +13,7 @@
 Crypto-laundering operations exploit the speed of blockchains. When victims report fraud, threat actors utilize automated mule networks, peel-chains, and cross-chain bridges to obfuscate the fund flow. Manual tracing by law enforcement often results in dead ends, as funds are cashed out via centralized exchanges (VASPs) before freeze requests can be drafted.
 
 **The Solution:**
-**BLUCE LOCK** operates as a high-density, real-time forensic workstation. It ingests suspect wallet addresses, automatically executes Multi-Hop Breadth-First Search (BFS) tracing, filters out noise (change wallets/burners), and accurately attributes the final destination to a registered VASP. It then generates court-ready statutory freeze notices (Sec. 91 / 102 CrPC) in one click.
+**TxSentinel** operates as a high-density, real-time forensic workstation. It ingests suspect wallet addresses, automatically executes Multi-Hop Breadth-First Search (BFS) tracing, filters out noise (change wallets/burners), and accurately attributes the final destination to a registered VASP. It then generates court-ready statutory freeze notices (Sec. 91 / 102 CrPC) in one click.
 
 ---
 
@@ -29,7 +29,7 @@ Crypto-laundering operations exploit the speed of blockchains. When victims repo
 
 ## 🏗️ System Architecture
 
-BLUCE LOCK utilizes a modern, decoupled microservices architecture optimized for rapid data ingestion and high-fidelity rendering.
+TxSentinel utilizes a modern, decoupled microservices architecture optimized for rapid data ingestion and high-fidelity rendering.
 
 ```mermaid
 graph LR
@@ -92,4 +92,4 @@ npm run dev
 
 ---
 
-*BLUCE LOCK — Precision tools for modern cybercrime enforcement.*
+*TxSentinel — Precision tools for modern cybercrime enforcement.*

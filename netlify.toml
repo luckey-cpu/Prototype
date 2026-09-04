@@ -1,4 +1,4 @@
-# BLUCE LOCK - Netlify Configuration
+# TxSentinel - Netlify Configuration
 [build]
   base = "frontend"
   publish = "dist"
