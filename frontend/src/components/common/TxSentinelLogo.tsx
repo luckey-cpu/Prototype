@@ -81,13 +81,14 @@ export const TxSentinelLogo: React.FC<TxSentinelLogoProps> = ({
       </div>
 
       {showText && (
-        <div className="flex flex-col">
-          <span className={`font-black tracking-tight text-slate-900 dark:text-white font-mono flex items-center leading-none ${
-            textSize === 'sm' ? 'text-base' : textSize === 'lg' ? 'text-2xl' : 'text-lg'
+        <div className="flex flex-col text-left">
+          <span className={`font-black tracking-tight font-sans flex items-center leading-none ${
+            textSize === 'sm' ? 'text-[17px]' : textSize === 'lg' ? 'text-2xl' : 'text-lg'
           }`}>
-            Tx<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-sky-400">Sentinel</span>
+            <span className="text-sky-400 font-black mr-0.5">Tx</span>
+            <span className="text-slate-900 dark:text-white font-black">Sentinel</span>
           </span>
-          <span className="text-[9px] font-bold tracking-[0.2em] text-blue-500 dark:text-blue-400 uppercase mt-1">
+          <span className="text-[9px] font-bold tracking-[0.18em] text-sky-500 dark:text-sky-400 uppercase mt-1 leading-none">
             Forensic Intelligence
           </span>
         </div>
