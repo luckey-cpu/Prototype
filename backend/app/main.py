@@ -54,8 +54,8 @@ async def startup_event():
     logger.info("Postgres tables created (if not exist)")
     
     # Load PyTorch and XGBoost Models into Memory
-    from app.ml.inference import load_runtime_artifacts
-    load_runtime_artifacts()
+    from app.ml.inference import get_engine
+    get_engine()
 
 @app.get("/")
 def root():

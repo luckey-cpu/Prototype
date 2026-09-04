@@ -1,6 +1,9 @@
 import os
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from weasyprint import HTML
+try:
+    from weasyprint import HTML
+except OSError:
+    HTML = None  # GTK libs not installed; PDF generation will be unavailable
 import structlog
 import uuid
 import json
@@ -103,6 +106,8 @@ def generate_dossier(metadata: dict, path_traversal: list, evidence_table: list,
     pdf_path = f"/tmp/{pdf_filename}" # In production, save to S3 or secure volume
     
     # Write to PDF
+    if HTML is None:
+        raise RuntimeError("WeasyPrint is not available (GTK/Pango libs not installed). Cannot generate PDF.")
     HTML(string=rendered_html).write_pdf(pdf_path)
     
     logger.info("PDF generated successfully", path=pdf_path)
