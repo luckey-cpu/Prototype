@@ -1,5 +1,119 @@
-import React, { useState } from 'react';
-import { Settings, ShieldCheck, Activity, Key, Lock, UserCheck, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import {
+  Settings,
+  Activity,
+  Key,
+  UserCheck,
+  AlertTriangle,
+  CheckCircle2,
+  Copy,
+  Eye,
+  EyeOff,
+  Check,
+  Server,
+  Database,
+  Cpu,
+  BarChart2
+} from 'lucide-react';
+
+interface ApiKeyFieldProps {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  hint?: string;
+}
+
+const ApiKeyField: React.FC<ApiKeyFieldProps> = ({ id, label, value, onChange, hint }) => {
+  const [visible, setVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard access denied — fail silently in sandboxed env
+    }
+  }, [value]);
+
+  return (
+    <div className="space-y-1.5">
+      <label htmlFor={id} className="flex items-center justify-between text-xs font-medium text-slate-300">
+        <span>{label}</span>
+        {hint && <span className="text-[10px] font-mono text-slate-500">{hint}</span>}
+      </label>
+      <div className="relative group">
+        <input
+          id={id}
+          type={visible ? 'text' : 'password'}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          spellCheck={false}
+          autoComplete="off"
+          className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3.5 py-2.5 pr-20 text-sm font-mono text-slate-100 placeholder-slate-600 focus:outline-none focus:border-blue-500/70 focus:ring-2 focus:ring-blue-500/20 transition-all"
+        />
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setVisible(!visible)}
+            aria-label={visible ? 'Hide API key' : 'Show API key'}
+            className="p-1 rounded text-slate-500 hover:text-slate-300 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          >
+            {visible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            type="button"
+            onClick={handleCopy}
+            aria-label="Copy API key to clipboard"
+            className="p-1 rounded text-slate-500 hover:text-slate-300 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          >
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface StatusCardProps {
+  label: string;
+  status: string;
+  statusColor: 'emerald' | 'amber' | 'red';
+  detail: string;
+  icon: React.FC<{ className?: string }>;
+}
+
+const StatusCard: React.FC<StatusCardProps> = ({ label, status, statusColor, detail, icon: Icon }) => {
+  const colorMap = {
+    emerald: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+    amber: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+    red: 'text-red-400 bg-red-500/10 border-red-500/20',
+  };
+
+  const dotMap = {
+    emerald: 'bg-emerald-500',
+    amber: 'bg-amber-500',
+    red: 'bg-red-500',
+  };
+
+  return (
+    <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center">
+          <Icon className="w-3.5 h-3.5 text-slate-400" />
+        </div>
+        <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">{label}</span>
+      </div>
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className={`w-1.5 h-1.5 rounded-full ${dotMap[statusColor]} shrink-0`} />
+        <span className={`text-xs font-mono font-bold ${colorMap[statusColor].split(' ')[0]}`}>{status}</span>
+      </div>
+      <span className="text-[11px] text-slate-500 font-mono">{detail}</span>
+    </div>
+  );
+};
 
 export const SettingsPage: React.FC = () => {
   const [etherscanKey, setEtherscanKey] = useState('ETH_SCAN_API_DEMO_KEY_9921');
@@ -9,168 +123,175 @@ export const SettingsPage: React.FC = () => {
   const handleSaveKeys = (e: React.FormEvent) => {
     e.preventDefault();
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  const handleReset = () => {
+    setEtherscanKey('ETH_SCAN_API_DEMO_KEY_9921');
+    setPolygonscanKey('POLYGON_SCAN_API_DEMO_KEY_4412');
   };
 
   return (
-    <div className="space-y-8 p-6 max-w-5xl mx-auto">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-2">
-          <Settings className="w-6 h-6 text-cyan-400" />
-          <h1 className="text-2xl font-mono font-black text-white tracking-tight">
-            System Status &amp; Investigation Platform Settings
-          </h1>
+    <div className="space-y-6 p-6 max-w-5xl mx-auto text-slate-100">
+
+      {/* Page Header */}
+      <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div>
+          <div className="flex items-center gap-2.5 mb-1">
+            <Settings className="w-5 h-5 text-blue-400" />
+            <h1 className="text-xl font-bold text-white tracking-tight">
+              Platform Settings
+            </h1>
+          </div>
+          <p className="text-sm text-slate-400">
+            RPC connectivity, forensic API credentials, investigator profile, and legal compliance configuration.
+          </p>
         </div>
-        <p className="text-xs text-slate-400 font-mono mt-1">
-          Node RPC connectivity, forensic API keys, law enforcement role permissions, and legal compliance.
-        </p>
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          CONFIG v2.4.1
+        </div>
       </div>
 
       {/* System Health Status Grid */}
-      <div className="glass-panel-glow rounded-2xl p-6 border-cyan-500/30 space-y-4">
-        <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
-          <Activity className="w-5 h-5 text-emerald-400" />
-          <h2 className="font-mono text-sm font-bold text-white uppercase tracking-wider">
-            Engine &amp; Multi-Chain Node Health
+      <section aria-labelledby="health-heading">
+        <div className="flex items-center gap-2 mb-4">
+          <Activity className="w-4 h-4 text-emerald-400" />
+          <h2 id="health-heading" className="text-sm font-semibold text-white">
+            Engine & Multi-Chain Node Health
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <span className="text-[10px] text-slate-500 uppercase block">FastAPI Analytics Core</span>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="font-bold text-emerald-400">ONLINE (Port 8000)</span>
-            </div>
-            <span className="text-[10px] text-slate-500 mt-1 block">NetworkX 3.6 &bull; ReportLab</span>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <span className="text-[10px] text-slate-500 uppercase block">Ethereum RPC Node</span>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="font-bold text-emerald-400">ACTIVE (14ms)</span>
-            </div>
-            <span className="text-[10px] text-slate-500 mt-1 block">Mainnet Block #20577240</span>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <span className="text-[10px] text-slate-500 uppercase block">Polygon PoS Gateway</span>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="font-bold text-emerald-400">ACTIVE (22ms)</span>
-            </div>
-            <span className="text-[10px] text-slate-500 mt-1 block">Bor Block #61350100</span>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
-            <span className="text-[10px] text-slate-500 uppercase block">VASP Cluster Index</span>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="font-bold text-emerald-400">LOADED (v2.4)</span>
-            </div>
-            <span className="text-[10px] text-slate-500 mt-1 block">174 Exchange Clusters</span>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <StatusCard
+            label="FastAPI Analytics Core"
+            status="ONLINE"
+            statusColor="emerald"
+            detail="Port 8000 · NetworkX 3.6"
+            icon={Cpu}
+          />
+          <StatusCard
+            label="Ethereum RPC Node"
+            status="ACTIVE · 14ms"
+            statusColor="emerald"
+            detail="Mainnet Block #20,577,240"
+            icon={Server}
+          />
+          <StatusCard
+            label="Polygon PoS Gateway"
+            status="ACTIVE · 22ms"
+            statusColor="emerald"
+            detail="Bor Block #61,350,100"
+            icon={BarChart2}
+          />
+          <StatusCard
+            label="VASP Cluster Index"
+            status="LOADED v2.4"
+            statusColor="emerald"
+            detail="174 Exchange Clusters"
+            icon={Database}
+          />
         </div>
-      </div>
+      </section>
 
       {/* API Key Configuration */}
-      <div className="glass-panel rounded-2xl p-6 border-cyan-500/20">
-        <div className="flex items-center gap-2 mb-2">
-          <Key className="w-5 h-5 text-cyan-400" />
-          <h2 className="font-mono text-sm font-bold text-white uppercase tracking-wider">
-            Live Blockchain Indexer API Keys
+      <section aria-labelledby="api-heading" className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
+        <div className="flex items-center gap-2 mb-1">
+          <Key className="w-4 h-4 text-blue-400" />
+          <h2 id="api-heading" className="text-sm font-semibold text-white">
+            Blockchain Indexer API Keys
           </h2>
         </div>
-        <p className="text-xs text-slate-400 font-mono mb-4">
-          Replace prototype synthetic mocks with production live explorer API credentials for real-time wallet retrieval.
+        <p className="text-sm text-slate-400 mb-6">
+          Replace synthetic demo mocks with production explorer credentials to enable real-time wallet retrieval and live transaction data.
         </p>
 
-        <form onSubmit={handleSaveKeys} className="space-y-4 text-xs font-mono">
-          <div>
-            <label className="text-slate-300 mb-1 block">Etherscan API Key</label>
-            <input
-              type="text"
-              value={etherscanKey}
-              onChange={(e) => setEtherscanKey(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-cyan-400 focus:outline-none"
-            />
-          </div>
+        <form onSubmit={handleSaveKeys} className="space-y-5">
+          <ApiKeyField
+            id="etherscan-key"
+            label="Etherscan API Key"
+            value={etherscanKey}
+            onChange={setEtherscanKey}
+            hint="etherscan.io/myapikey"
+          />
+          <ApiKeyField
+            id="polygonscan-key"
+            label="Polygonscan API Key"
+            value={polygonscanKey}
+            onChange={setPolygonscanKey}
+            hint="polygonscan.com/myapikey"
+          />
 
-          <div>
-            <label className="text-slate-300 mb-1 block">Polygonscan API Key</label>
-            <input
-              type="text"
-              value={polygonscanKey}
-              onChange={(e) => setPolygonscanKey(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-cyan-400 focus:outline-none"
-            />
-          </div>
-
-          <div className="flex items-center justify-between pt-2">
-            {saved ? (
-              <span className="text-emerald-400 flex items-center gap-1 text-xs">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>API configuration saved successfully</span>
-              </span>
-            ) : <span />}
-
-            <button
-              type="submit"
-              className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold cursor-pointer transition-colors shadow-[0_0_12px_rgba(6,182,212,0.3)]"
-            >
-              SAVE CONFIGURATION
-            </button>
+          {/* Action Bar */}
+          <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+            <div className="h-5">
+              {saved && (
+                <span className="flex items-center gap-1.5 text-xs text-emerald-400">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Configuration saved successfully
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="px-3.5 py-2 rounded-lg border border-slate-700 text-xs font-medium text-slate-400 hover:text-slate-200 hover:border-slate-600 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+              >
+                Reset to Defaults
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors shadow-lg shadow-blue-600/20 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none active:scale-95"
+              >
+                Save Configuration
+              </button>
+            </div>
           </div>
         </form>
-      </div>
+      </section>
 
-      {/* Role-Based Access Profile */}
-      <div className="glass-panel rounded-2xl p-6 border-slate-800 space-y-4">
-        <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
-          <UserCheck className="w-5 h-5 text-cyan-400" />
-          <h2 className="font-mono text-sm font-bold text-white uppercase tracking-wider">
-            Law Enforcement Investigator Profile &amp; Clearance
+      {/* Investigator Profile */}
+      <section aria-labelledby="profile-heading" className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
+        <div className="flex items-center gap-2 pb-4 border-b border-slate-800 mb-4">
+          <UserCheck className="w-4 h-4 text-blue-400" />
+          <h2 id="profile-heading" className="text-sm font-semibold text-white">
+            Investigator Profile & Clearance
           </h2>
         </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { label: 'Officer Name & Rank', primary: 'Insp. V. K. Deshmukh', secondary: 'Cyber Crime Spl. Cell', accent: 'text-slate-100' },
+            { label: 'Assigned System Role', primary: 'LEAD INVESTIGATOR', secondary: 'Level 3 — Requisition Authorized', accent: 'text-emerald-400' },
+            { label: 'Official Badge Number', primary: 'CY-7819', secondary: 'NCRP Verified Token', accent: 'text-slate-100' },
+          ].map(({ label, primary, secondary, accent }) => (
+            <div key={label} className="p-4 rounded-xl bg-slate-900 border border-slate-800">
+              <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider block mb-1.5">{label}</span>
+              <span className={`font-bold text-sm font-mono block ${accent}`}>{primary}</span>
+              <span className="text-[11px] text-slate-500 mt-0.5 block">{secondary}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs font-mono">
-          <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-            <span className="text-[10px] text-slate-500 block uppercase">Officer Name &amp; Rank</span>
-            <span className="font-bold text-white block mt-0.5">Insp. V. K. Deshmukh</span>
-            <span className="text-cyan-400 text-[10px]">Cyber Crime Spl. Cell</span>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-            <span className="text-[10px] text-slate-500 block uppercase">Assigned System Role</span>
-            <span className="font-bold text-emerald-400 block mt-0.5">LEAD INVESTIGATOR</span>
-            <span className="text-slate-400 text-[10px]">Level 3 (Requisition Authorized)</span>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-            <span className="text-[10px] text-slate-500 block uppercase">Official Badge Number</span>
-            <span className="font-bold text-white block mt-0.5">CY-7819</span>
-            <span className="text-slate-400 text-[10px]">NCRP Verified Token</span>
+      {/* Legal Disclaimer */}
+      <section className="p-5 rounded-xl bg-red-950/20 border border-red-500/20">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+          <div>
+            <h3 className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-2">
+              Statutory Legal Disclaimer & Evidence Protocols
+            </h3>
+            <p className="text-sm text-slate-400 leading-relaxed mb-2">
+              BLUE LOCK is an investigative intelligence prototype designed exclusively for authorized law enforcement and cybercrime forensics personnel. Attribution results and risk ratings are probabilistic and require statutory verification by authorized officers through appropriate legal processes under Sections 91 and 102 CrPC / Bharatiya Nagarik Suraksha Sanhita.
+            </p>
+            <p className="text-xs text-slate-500 leading-relaxed">
+              This platform complies with ethical AI and forensic security principles. It provides no mechanisms for transaction mixing, trace obfuscation, or regulatory circumvention.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Security & Ethics Legal Notice */}
-      <div className="p-6 rounded-2xl bg-slate-950/90 border border-red-500/30 space-y-3 text-xs font-mono">
-        <div className="flex items-center gap-2 text-red-400">
-          <AlertTriangle className="w-5 h-5" />
-          <h3 className="font-bold uppercase tracking-wider">
-            Statutory Legal Disclaimer &amp; Evidence Protocols
-          </h3>
-        </div>
-        <p className="text-slate-300 leading-relaxed">
-          BLUCE LOCK is an investigative intelligence prototype designed exclusively for authorized law enforcement and cybercrime forensics personnel. Attribution results and risk ratings are probabilistic and require statutory verification by authorized investigating officers through appropriate legal processes (e.g., Section 91 and Section 102 of the Code of Criminal Procedure, 1973 / Bharatiya Nagarik Suraksha Sanhita).
-        </p>
-        <p className="text-slate-400 text-[11px] leading-relaxed">
-          This platform strictly complies with ethical AI and forensic security principles. It does not provide mechanisms for money laundering, transaction mixing, obfuscating traces, or circumventing regulatory compliance controls.
-        </p>
-      </div>
     </div>
   );
 };

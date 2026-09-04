@@ -80,7 +80,7 @@ const AuthenticatedApp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col selection:bg-blue-100 selection:text-blue-900 font-sans">
+    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col selection:bg-blue-900/50 selection:text-blue-200 font-sans">
       <RadarScannerModal
         isOpen={isSampleScanning}
         walletAddress={activeWallet}
@@ -103,7 +103,7 @@ const AuthenticatedApp = () => {
           isOpenOnMobile={isMobileMenuOpen}
           onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
-        <main className="flex-1 overflow-y-auto bg-slate-50">
+        <main className="flex-1 overflow-y-auto bg-[#030712]">
           {currentPage === 'forensic-workspace' && <ForensicWorkspace initialAddress={activeWallet} />}
           {currentPage === 'dashboard' && (
             <DashboardPage
