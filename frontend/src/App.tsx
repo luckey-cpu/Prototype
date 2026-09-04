@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar, PageId } from './components/common/Sidebar';
 import { RadarScannerModal } from './components/common/RadarScannerModal';
 import { LandingPage } from './pages/LandingPage';
+import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { WalletAnalysisPage } from './pages/WalletAnalysisPage';
 import { TransactionGraphPage } from './pages/TransactionGraphPage';
@@ -18,8 +20,20 @@ import { ForensicWorkspace } from './components/forensic/ForensicWorkspace';
 import { Blockchain, CaseData } from './types';
 import { DEMO_SUSPECT_ADDRESS, DEMO_CASES } from './data/demoData';
 
-export function App() {
-  const [inConsole, setInConsole] = useState(false);
+// Wrapper for LandingPage to supply navigation handlers via router
+const LandingPageWrapper = () => {
+  const navigate = useNavigate();
+  return (
+    <LandingPage
+      onLaunchConsole={() => navigate('/login')}
+      onLoadSample={() => navigate('/dashboard')}
+    />
+  );
+};
+
+// Extracted authenticated layout
+const AuthenticatedApp = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<PageId>('forensic-workspace');
   const [activeWallet, setActiveWallet] = useState<string>(DEMO_SUSPECT_ADDRESS);
   const [selectedCase, setSelectedCase] = useState<CaseData>(DEMO_CASES[0]);
@@ -27,9 +41,7 @@ export function App() {
   const [unreadAlerts, setUnreadAlerts] = useState(2);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // 1-Click SIH Presentation Demo Launcher
   const handleLoadSampleInvestigation = () => {
-    setInConsole(true);
     setActiveWallet(DEMO_SUSPECT_ADDRESS);
     setSelectedCase(DEMO_CASES[0]);
     setIsSampleScanning(true);
@@ -38,8 +50,6 @@ export function App() {
   const handleSampleScanComplete = () => {
     setIsSampleScanning(false);
     setCurrentPage('forensic-workspace');
-
-    // Confetti burst for demo impact
     try {
       confetti({
         particleCount: 60,
@@ -52,13 +62,6 @@ export function App() {
     }
   };
 
-  // Launch console from landing page
-  const handleLaunchConsole = () => {
-    setInConsole(true);
-    setCurrentPage('forensic-workspace');
-  };
-
-  // Analyze wallet from search
   const handleAnalyzeWalletFromDashboard = (address: string, chain: Blockchain) => {
     setActiveWallet(address);
     setCurrentPage('wallet-analysis');
@@ -70,33 +73,19 @@ export function App() {
     setCurrentPage('forensic-workspace');
   };
 
-  // Case docket selection
   const handleSelectCase = (c: CaseData) => {
     setSelectedCase(c);
     setActiveWallet(c.suspect_wallet);
     setCurrentPage('reports');
   };
 
-  // If user is on landing page
-  if (!inConsole) {
-    return (
-      <LandingPage
-        onLaunchConsole={handleLaunchConsole}
-        onLoadSample={handleLoadSampleInvestigation}
-      />
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col selection:bg-blue-100 selection:text-blue-900 font-sans">
-      {/* Radar Scanner Modal for Sample Investigation flow */}
       <RadarScannerModal
         isOpen={isSampleScanning}
         walletAddress={activeWallet}
         onComplete={handleSampleScanComplete}
       />
-
-      {/* Persistent Top Navigation */}
       <Navbar
         onLoadSample={handleLoadSampleInvestigation}
         unreadAlertCount={unreadAlerts}
@@ -106,8 +95,6 @@ export function App() {
         onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         onSearch={handleGlobalSearch}
       />
-
-      {/* Main Layout: Sidebar + Page Container */}
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
           activePage={currentPage}
@@ -116,10 +103,8 @@ export function App() {
           isOpenOnMobile={isMobileMenuOpen}
           onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
-
         <main className="flex-1 overflow-y-auto bg-slate-50">
           {currentPage === 'forensic-workspace' && <ForensicWorkspace initialAddress={activeWallet} />}
-
           {currentPage === 'dashboard' && (
             <DashboardPage
               onAnalyzeWallet={handleAnalyzeWalletFromDashboard}
@@ -133,7 +118,6 @@ export function App() {
               }}
             />
           )}
-
           {currentPage === 'wallet-analysis' && (
             <WalletAnalysisPage
               initialAddress={activeWallet}
@@ -148,7 +132,6 @@ export function App() {
               onGenerateReport={() => setCurrentPage('reports')}
             />
           )}
-
           {currentPage === 'transaction-graph' && (
             <TransactionGraphPage
               onSelectWallet={(addr) => {
@@ -160,7 +143,6 @@ export function App() {
               onGenerateReport={() => setCurrentPage('reports')}
             />
           )}
-
           {currentPage === 'vasp-intelligence' && (
             <VASPIntelligencePage
               walletAddress={activeWallet}
@@ -168,7 +150,6 @@ export function App() {
               onGenerateReport={() => setCurrentPage('reports')}
             />
           )}
-
           {currentPage === 'cross-chain' && (
             <CrossChainPage
               onViewGraph={() => setCurrentPage('transaction-graph')}
@@ -176,14 +157,12 @@ export function App() {
               onGenerateReport={() => setCurrentPage('reports')}
             />
           )}
-
           {currentPage === 'ai-assistant' && (
             <AIAssistantPage
               walletAddress={activeWallet}
               onGenerateReport={() => setCurrentPage('reports')}
             />
           )}
-
           {currentPage === 'alerts' && (
             <AlertCenterPage
               onViewCase={(caseId) => {
@@ -202,19 +181,28 @@ export function App() {
               }}
             />
           )}
-
           {currentPage === 'cases' && (
             <CaseManagementPage onSelectCase={handleSelectCase} />
           )}
-
           {currentPage === 'reports' && (
             <InvestigationReportPage currentCase={selectedCase} />
           )}
-
           {currentPage === 'settings' && <SettingsPage />}
         </main>
       </div>
     </div>
+  );
+};
+
+export function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPageWrapper />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard/*" element={<AuthenticatedApp />} />
+      </Routes>
+    </Router>
   );
 }
 
