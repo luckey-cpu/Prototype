@@ -1,0 +1,57 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body { font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; padding: 40px; }
+                h1 { text-align: center; text-decoration: underline; }
+                .bold { font-weight: bold; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+            </style>
+        </head>
+        <body>
+            <h1>FORM OF NOTICE UNDER SECTION 91 Cr.P.C</h1>
+            <p><strong>To,</strong><br>
+            The Nodal Officer / Legal Compliance Dept.<br>
+            {{ vasp_details.vasp_name }}</p>
+
+            <p><strong>Sub:</strong> Notice u/s 91 Cr.P.C for preservation and production of information regarding crypto address <span class="bold">{{ vasp_details.deposit_address }}</span></p>
+
+            <p>It is revealed during the investigation of Case FIR No. <strong>{{ metadata.case_number }}</strong> that stolen cryptocurrency was routed to the deposit address <strong>{{ vasp_details.deposit_address }}</strong> maintained by your exchange.</p>
+
+            <h3>Trace Path:</h3>
+            <ul>
+                {% for hop in path_traversal %}
+                <li>{{ hop }}</li>
+                {% endendfor %}
+            </ul>
+
+            <h3>Transaction Evidence Log:</h3>
+            <table>
+                <tr><th>Tx Hash</th><th>Timestamp</th><th>Amount</th><th>Token</th></tr>
+                {% for tx in evidence_table %}
+                <tr>
+                    <td>{{ tx.tx_hash }}</td>
+                    <td>{{ tx.timestamp }}</td>
+                    <td>{{ tx.amount }}</td>
+                    <td>{{ tx.token }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <p>You are hereby directed to:</p>
+            <ol>
+                <li>Immediately freeze the said account/wallet.</li>
+                <li>Provide KYC details, IP logs, and linked bank accounts.</li>
+                <li>Provide complete deposit and withdrawal history.</li>
+            </ol>
+            <br><br>
+            <p>Failure to comply may attract legal proceedings under relevant sections of the law.</p>
+            <br>
+            <p>Date: {{ metadata.report_date }}</p>
+            <p>Investigating Officer</p>
+        </body>
+        </html>
+        
