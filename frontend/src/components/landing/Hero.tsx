@@ -1,5 +1,6 @@
 import React from 'react';
-import { Shield, Search, Building2, GitFork, Bot, FileText } from 'lucide-react';
+import { Shield, Search } from 'lucide-react';
+import { ForensicModulesGrid } from './ForensicModulesGrid';
 
 interface HeroProps {
   onLaunchConsole: () => void;
@@ -7,36 +8,8 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onLaunchConsole, onLoadSample }) => {
-  const features = [
-    {
-      title: 'REAL-TIME TRACING',
-      desc: 'Instant EVM and UTXO transaction graph traversal mapping suspect fund dispersal within seconds to aid rapid investigation.',
-      icon: Search,
-    },
-    {
-      title: 'VASP ATTRIBUTION',
-      desc: 'Probabilistic exchange attribution identifying likely cashing-out deposit clusters with evidence verification.',
-      icon: Building2,
-    },
-    {
-      title: 'CROSS-CHAIN ANALYSIS',
-      desc: 'Relayer-level tracking of cross-chain bridge hops across Ethereum, Polygon, and Arbitrum breaking chain-hopping obfuscation.',
-      icon: GitFork,
-    },
-    {
-      title: 'AI RISK DETECTION',
-      desc: 'Explainable rule-based and ML risk engine detecting rapid forwarding, peel chains, and mule feeder patterns.',
-      icon: Bot,
-    },
-    {
-      title: 'STATUTORY REPORTING',
-      desc: 'Automated Section 65B forensic reports ready for statutory notices under Section 91 and 102 CrPC and BNSS court dockets.',
-      icon: FileText,
-    }
-  ];
-
   return (
-    <main className="flex-1 w-full bg-transparent">
+    <main className="flex-1 w-full bg-transparent relative z-10">
       <section className="hero-bg py-20 px-6 text-center min-h-[500px] flex flex-col justify-center items-center">
         
         {/* Sub-header Badge */}
@@ -75,29 +48,8 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchConsole, onLoadSample }) => 
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        {/* Structured Feature Grid (CSS Grid) */}
-        <div className="mt-24 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-          {features.map((f, idx) => {
-            const Icon = f.icon;
-            return (
-              <article
-                key={idx}
-                className="bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all p-6 rounded-xl flex flex-col h-full focus-within:ring-2 focus-within:ring-blue-500"
-              >
-                <div className="w-10 h-10 rounded-lg bg-[#EFF6FF] flex items-center justify-center mb-5 shrink-0">
-                  <Icon className="w-5 h-5 text-blue-900" aria-hidden="true" />
-                </div>
-                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-3">
-                  {f.title}
-                </h2>
-                <p className="text-sm text-slate-600 leading-relaxed flex-1">
-                  {f.desc}
-                </p>
-              </article>
-            );
-          })}
-        </div>
+      <section className="max-w-7xl mx-auto px-6">
+        <ForensicModulesGrid />
       </section>
     </main>
   );
